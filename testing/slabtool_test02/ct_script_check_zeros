@@ -1,0 +1,4 @@
+load temp/temp_file tab
+get_column_max tab 3 value row
+save temp/temp_col_max value
+

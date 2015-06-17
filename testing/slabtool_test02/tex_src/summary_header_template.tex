@@ -1,0 +1,82 @@
+
+\documentclass[10pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{chngpage}
+\usepackage{fancyvrb}
+
+\begin{document}
+
+\title{PlanarRad\\Result sheet for Hydrolight comparison}
+\author{automatically generated on machine \texttt{<HOST>} on:}
+\date{\texttt{<DATE>}}
+
+\maketitle
+
+%Generated on: \texttt{<DATE>}
+%\bigskip
+
+%Comments or queries should be addressed to: \texttt{j.d.hedley@planarrad.com}
+
+\section*{Introduction}
+
+This is an automatically generated document constructed from a PlanarRad installation test script. It compares the quad-averaged radiance outputs from PlanarRad to a dataset derived from a series of runs of Hydrolight version 4.2. The run configurations are split into two groups. The first set, with codes \texttt{jod} through \texttt{jos} were conducted with a flat air-water interface and a Hydrolight idealised sky model with $C=0$ and diffuse fraction 0.3 with a solar zenith angle of $\theta_\mathrm{S}=0$ or $\theta_\mathrm{S}=30^{\circ},\phi_\mathrm{S}=0$. Depths range from 1 m to 125 m, bottom Lambertian reflectance \textit{R} is 0.7, 0.0 or 1.0, and single scattering albedos from 0 to 1.0. See Table 1 below. Not all of these run configuratiosn are yet included in this docuemnt. The second set of configurations \texttt{jowa} through \texttt{jowe} were designed to compare the azimuthally averaged wind-blown air-water interface functions for wind speeds of $0\;\mathrm{ms}^{-1}$, $0.5\;\mathrm{ms}^{-1}$, $3\;\mathrm{ms}^{-1}$ and $10\;\mathrm{ms}^{-1}$. Plots show quad-averaged radiance in the solar plane and at right-angles to the solar plane, $\phi=90^{\circ}$. Theta angles are in the Hydrolight style, so that $\theta=0$ is either directly upward or downward dependent on the context.
+
+\section*{Acknowledgements}
+
+The Hydrolight data was provided by Ellsworth LeDrew and Alan Lim of the University or Waterloo, Canada.
+
+\section*{Notes}
+
+\begin{enumerate}
+\item Since \texttt{gnuplot} fails when plotting data of all zeros on a log axis, result sets of all zeros are replaced by \texttt{1e-100}. Hence plots which appear uniform at \texttt{1e-100} are in reality all zero values.
+\item The Hydrolight run \texttt{jof08} had an error in the parameter set-up so is not included here.
+\item Bear in mind any discrepancies or other features of the plots may be caused by bugs in the document generation script and so not directably attributable to PlanarRad or Hydrolight.
+\end{enumerate}
+
+\begin{table}
+\caption{Test run configurations}
+\noindent\makebox[\textwidth]{%
+\begin{tabularx}{1.4\textwidth}{ c c c c c c c c c }
+\hline
+code & depth (m) & \textit{a} & \textit{b} & \textit{c} & phase func. & \textit{R} & $\theta_\mathrm{S}$ & page \\
+\hline
+\texttt{jod} & 1 & 0, 0.2, 0.4, 0.6. 0.8, 1.0 & 1.0, 0.8, 0.6, 0.4, 0.2, 0 & 1.0 & isotropic & 0.7 & 0 & - \\
+\texttt{joe} & 5 & 0, 0.2, 0.4, 0.6. 0.8, 1.0 & 1.0, 0.8, 0.6, 0.4, 0.2, 0 & 1.0 & isotropic & 0.7 & 0 & - \\
+\texttt{jof} & 25 & 0, 0.2, 0.4, 0.6. 0.8, 1.0 & 1.0, 0.8, 0.6, 0.4, 0.2, 0 & 1.0 & isotropic & 0.7 & 0 & - \\
+\texttt{jog} & 125 & 0, 0.2, 0.4, 0.6. 0.8, 1.0 & 1.0, 0.8, 0.6, 0.4, 0.2, 0 & 1.0 & isotropic & 0.7 & 0 & - \\
+\texttt{joj} & 1 & 0, 0.2, 0.4, 0.6. 0.8, 1.0 & 1.0, 0.8, 0.6, 0.4, 0.2, 0 & 1.0 & Petzold & 0.7 & 0 & - \\
+\texttt{joi} & 5 & 0, 0.2, 0.4, 0.6. 0.8, 1.0 & 1.0, 0.8, 0.6, 0.4, 0.2, 0 & 1.0 & Petzold & 0.7 & 0 & - \\
+\texttt{joj} & 25 & 0, 0.2, 0.4, 0.6. 0.8, 1.0 & 1.0, 0.8, 0.6, 0.4, 0.2, 0 & 1.0 & Petzold & 0.7 & 0 & - \\
+\texttt{jok} & 125 & 0, 0.2, 0.4, 0.6. 0.8, 1.0 & 1.0, 0.8, 0.6, 0.4, 0.2, 0 & 1.0 & Petzold & 0.7 & 0 & - \\
+\texttt{jol} & 5 & 0, 0.2, 0.4, 0.6. 0.8, 1.0 & 1.0, 0.8, 0.6, 0.4, 0.2, 0 & 1.0 & Petzold & 0 & 30 & - \\
+\texttt{jos} & 125 & 0 & 1.0 & 1.0 & isotropic & 1.0 & 0 \\
+\hline
+\end{tabularx}}
+\end{table}
+
+\begin{table}
+\caption{Meaning of figure caption codes}
+\noindent\makebox[\textwidth]{%
+\begin{tabularx}{1\textwidth}{ l l }
+\hline
+\texttt{Ld} & downward directed radiance \\
+\texttt{Lu} & upward directed radiance \\
+\texttt{-a} & just above the water surface \\
+\texttt{-w} & just below the water surface \\
+\texttt{-it} & component transmitted through the air-water interface \\
+\texttt{-ir} & component reflected from the air-water interface \\
+\texttt{-sample-1.00m} & at depth 1.00 m below the water surface, etc. \\
+\texttt{PR} & PlanarRad \\
+\texttt{HL} & Hydrolight \\
+\hline
+\end{tabularx}}
+\end{table}
+
+\vspace*{5in}
+
+
+%This is the contents of the prameters template file used as input to \texttt{surftool}:
+%\VerbatimInput[baselinestretch=1,fontsize=\footnotesize]{params_template}
+
+\begin{adjustwidth}{-1.2in}{-1.2in}% adjust the L and R margins by 1 inch

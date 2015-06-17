@@ -1,0 +1,7 @@
+ang_theta_in = 30
+ang_theta_out_min = 180
+ang_theta_out_max = 360
+ang_theta_out_steps = 180
+ang_phi_in = 0
+ang_phi_out = 0
+ang_data_save_fp = ang_out

@@ -1,0 +1,11 @@
+# This is a petzold phase function as required 
+# for the comparision to HydrolLight run series.
+# Is included in slabtool_test02 as pf_petzold_mono_HL18x24.
+
+band_count = 1
+partition = sphere
+vn = 18
+hn = 24
+theta_points = 0,5,15,25,35,45,55,65,75,85,90,95,105,115,125,135,145,155,165,175,180
+type = petzold
+phase_func_save_fp = params_patzold_mono_HL18x24

@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# create configure script - has been be done already so commented out
+# ./autogen.sh
+
+# builds directory that with symlinks looks like how the build process
+# expects to find qt4 layed out
+rm -rf pretend_qt4_dir
+mkdir pretend_qt4_dir
+mkdir pretend_qt4_dir/bin
+ln -s /usr/bin/moc-qt4 pretend_qt4_dir/bin/moc
+ln -s /usr/bin/qmake-qt4 pretend_qt4_dir/bin/qmake
+ln -s /usr/bin/rcc pretend_qt4_dir/bin/rcc
+ln -s /usr/bin/uic-qt4 pretend_qt4_dir/bin/uic
+# this is the difference between Ferdora 19 and Ubuntu 13.04
+# Fedora
+if [ -e /usr/lib64/libQtCore.so ]; then
+  ln -s /usr/lib64 pretend_qt4_dir/lib
+  ln -s /usr/include pretend_qt4_dir/include
+# Ubuntu
+else
+  ln -s /usr/lib/x86_64-linux-gnu pretend_qt4_dir/lib
+  ln -s /usr/include/qt4 pretend_qt4_dir/include
+fi
+
+# this is the full path to a directory that using symlinks looks like 
+# how the build process expects qt4 to be layed out 
+PRETENDQT4DIR=$(pwd)"/pretend_qt4_dir"
+
+# make a directory to build in
+rm -rf build
+mkdir -p build
+
+# change to that directory
+cd build
+
+# to build command line version only without qt use option --disable-qt
+# remove --enable-optimised=yes to build without optimisation flags (may solve build problems but will run slower)
+../configure --prefix=$JUDE2DIR --with-qtdir=$PRETENDQT4DIR --enable-optimised=yes
+
+# compile
+make 
+
+# copy to $JUDE2DIR, if under /usr/local you probably need root priviliges
+# so if this fails try 'sudo make install'
+make install
+
+

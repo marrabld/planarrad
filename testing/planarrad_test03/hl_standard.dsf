@@ -1,0 +1,11 @@
+ds_name = HL Standard
+ds_code = HL18x24
+ds_hemi_code = HL9x24
+partition = sphere
+storage = table
+vn = 18
+hn = 24
+hvn = 9
+theta_points = 0,5,15,25,35,45,55,65,75,85,90,95,105,115,125,135,145,155,165,175,180
+hemi_theta_points = 0,5,15,25,35,45,55,65,75,85,90
+preferred_default = yes

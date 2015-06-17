@@ -1,0 +1,22 @@
+# This is the sky required for slabtool_test02.
+# It is the sky design used in several of the series of HydrolLight runs.
+# In Pjod00.txt the quad averaged radiance in the end cap is 2.94286e+01.
+# For all other quads it should be identical but varies slighlty presumably
+# due to numerical error (in skytool these values are always identical by design). 
+# In Pjod00.txt at quads of theta 10 degrees quad averaged radiance is 9.54945e-02 
+# and is close to 9.549e-02 in all qauds.
+# These are identical to 4 s.f. to the values calculated by skytool, see ang_data_ref.txt.
+
+band_count = 11
+partition = sphere
+vn = 18
+hn = 24
+theta_points = 0,5,15,25,35,45,55,65,75,85,90,95,105,115,125,135,145,155,165,175,180
+type = hlideal
+C = 0
+rdif = 0.3
+azimuth = 0
+zenith = 0
+sky_save_fp = sky_out
+sky_image_save_fp = image_out.ppm
+log_output_precision = 3

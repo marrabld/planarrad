@@ -1,0 +1,7 @@
+ds_name = Regular 4x8
+ds_code = 4x8
+ds_hemi_code = 4x8h
+partition = sphere
+vn = 4
+hn = 8
+hvn = 4

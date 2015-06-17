@@ -1,0 +1,35 @@
+set autoscale
+unset log
+unset label
+set key spacing 1.2
+set key right top
+set key samplen 2
+#set terminal x11
+set xrange [ -95 : 95 ]
+#set yrange [ <MINY> : <MAXY> ]
+#set yrange [ 0 : 200 ]
+set log y
+set xtic 30
+set xlabel "{/Symbol-Oblique q} (degrees)"
+set ylabel "Quad avg. {/Italic L}, Wm^{-2}sr^{-1}nm^{-1}" offset 2,0
+set format x
+set format y "10^{%L}"
+set style line 1 lt 1 lw 1 pt 0
+set style line 2 lt 2 lw 2 pt 0
+set style line 3 lt 3 lw 1 pt 0
+set style line 4 lt 4 lw 1 pt 0
+set title "<TITLE>, {/Italic w} = <WINDSPEED> ms^{-1}, {/Symbol-Oblique f} = <DEG>{/Symbol \260}"
+
+set out "<EPSFILE>"
+set terminal postscript eps enhanced mono lw 2 "Arial" 10
+#set terminal png enhanced  mono lw 2 "Arial 10"
+#set size 0.6,0.8
+set size 0.45,0.6
+plot \
+"<SRCDATA>" using 2:<SRCCOL> ls 1 with lines title "PR", \
+"<HLDATA>" using 2:3 ls 2 with lines title "HL"
+
+
+#replot
+#set terminal x11
+#set size 1,1

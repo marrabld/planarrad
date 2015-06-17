@@ -1,0 +1,6 @@
+band_count = 1
+partition = sphere
+vn = 4
+hn = 8
+type = petzold
+phase_func_save_fp = pf_petzold_mono_4x8

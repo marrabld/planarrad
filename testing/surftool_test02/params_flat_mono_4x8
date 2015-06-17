@@ -1,0 +1,10 @@
+verbose = 6
+band_count = 1
+partition = sphere
+vn = 4
+hn = 8
+type = flat
+refrac_index_0 = 1.33
+refrac_index_1 = 1
+sub_quad_count = 100000
+surface_save_fp = sf_flat_mono_4x8

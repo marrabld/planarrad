@@ -1,0 +1,13 @@
+load <SRCDATA> ang_data
+load <REFDATA> ang_data_ref
+column_subset ang_data angles 1 2
+column_subset ang_data data 3 3
+column_subset ang_data_ref data_ref 3 3
+negate data_ref
+add data_ref data
+divide data_ref data
+fabs data
+count_greater_than data <THRESH> count_out
+save count.txt count_out
+column_append angles data table_out
+save <OUTDATA> table_out

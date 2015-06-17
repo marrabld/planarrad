@@ -1,0 +1,53 @@
+
+band_count = 17
+band_centres_data = 410,430,450,470,490,510,530,550,570,590,610,630,650,670,690,710,730
+
+partition = sphere
+vn = 18
+hn = 24
+theta_points = 0,5,15,25,35,45,55,65,75,85,90,95,105,115,125,135,145,155,165,175,180
+
+depth = 5
+sample_point_distance = 1
+sample_point_delta_distance = 0.01
+
+sky_fp = sky_clear_z45_a50_17_HL18x24
+
+water_surface_fp = sf_flat_mono_HL18x24
+
+atten_fp = bz052_c17.txt
+scat_fp = bz052_b17.txt
+pf_fp = pf_petzold_mono_HL18x24
+
+bottom_reflec_diffuse_fp = ger_sand17.txt
+
+Ld_b_image_save_fp = image_Ld_b.ppm
+Ld_b_image_sens_k = 0.0008
+Lu_b_image_save_fp = image_Lu_b.ppm
+Lu_b_image_sens_k = 0.0008
+Ld_a_image_save_fp = image_Ld_a.ppm
+Ld_a_image_sens_k = 0.0008
+Lu_a_image_save_fp = image_Lu_a.ppm
+Lu_a_image_sens_k = 0.0008
+Ld_w_image_save_fp = image_Ld_w.ppm
+Ld_w_image_sens_k = 0.0008
+Lu_w_image_save_fp = image_Lu_w.ppm
+Lu_w_image_sens_k = 0.0008
+Lu_it_image_save_fp = image_Lu_it.ppm
+Lu_it_image_sens_k = 0.0008
+Lu_ir_image_save_fp = image_Lu_ir.ppm
+Lu_ir_image_sens_k = 0.0008
+Ld_it_image_save_fp = image_Ld_it.ppm
+Ld_it_image_sens_k = 0.0008
+Ld_ir_image_save_fp = image_Ld_ir.ppm
+Ld_ir_image_sens_k = 0.0008
+Lu_sample_image_save_fp = image_Lu_sample.ppm
+Lu_sample_image_sens_k = 0.0008
+Ld_sample_image_save_fp = image_Ld_sample.ppm
+Ld_sample_image_sens_k = 0.0008
+
+Ld_b_save_fp = Ld_b_data
+
+report_save_fp = report_all_17.txt
+
+verbose = 6

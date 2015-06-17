@@ -1,0 +1,6 @@
+band_count = 1
+partition = sphere
+vn = 4
+hn = 8
+type = mirror
+surface_save_fp = sf_mirror_mono_4x8

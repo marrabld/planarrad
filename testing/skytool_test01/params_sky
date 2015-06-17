@@ -1,0 +1,14 @@
+band_count=17
+band_centres_data=410,430,450,470,490,510,530,550,570,590,610,630,650,670,690,710,730
+partition=sphere
+vn=18
+hn=24
+theta_points=0,5,15,25,35,45,55,65,75,85,90,95,105,115,125,135,145,155,165,175,180
+type=grant
+azimuth=45
+zenith=50
+model_eqn=clear
+total_irrad_fp=tc0_total17.txt
+diffuse_irrad_fp=tc0_diffuse17.txt
+sky_save_fp=sky_out
+sky_image_save_fp=image_out.ppm

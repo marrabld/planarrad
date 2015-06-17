@@ -1,0 +1,181 @@
+
+verbose = 3
+
+# band centres are supplied just for creatimng the visualisation images
+band_count = 11
+band_centres_data=410,430,450,470,490,510,530,550,570,590,610
+
+partition = sphere
+vn = 18
+hn = 24
+theta_points = 0,5,15,25,35,45,55,65,75,85,90,95,105,115,125,135,145,155,165,175,180
+
+##jod## depth = 1
+##jod## sample_point_list = 0,0.01,0.1,0.11,0.2,0.21,0.3,0.31,0.4,0.41,0.5,0.51,0.6,0.61,0.7,0.71,0.8,0.81,0.9,0.91,0.99,1.0
+##jod## pf_fp = pf_isotropic_mono_HL18x24
+##jod## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##jod## water_surface_fp = sf_flat_mono_HL18x24
+##jod## bottom_reflec_diffuse_data = 0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7
+##jod## atten_data = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+##jod## scat_data = 1.0,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0.0
+
+##joe## depth = 5
+##joe## sample_point_list = 0,1,2,3,4,5
+###joe## sample_point_list = 0,0.01,1.0,1.01,2.0,2.01,3.0,3.01,4.0,4.01,4.99,5.0
+##joe## sample_point_delta_distance = 0.01
+##joe## pf_fp = pf_isotropic_mono_HL18x24
+##joe## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##joe## water_surface_fp = sf_flat_mono_HL18x24
+##joe## bottom_reflec_diffuse_data = 0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7
+##joe## atten_data = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+##joe## scat_data = 1.0,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0.0
+
+##jof## depth = 25
+##jof## sample_point_list = 0,0.01,5,5.01,10,10.01,15,15.01,20,20.01,24.99,25
+##jof## pf_fp = pf_isotropic_mono_HL18x24
+##jof## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##jof## water_surface_fp = sf_flat_mono_HL18x24
+##jof## bottom_reflec_diffuse_data = 0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7
+##jof## atten_data = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+##jof## scat_data = 1.0,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0.0
+
+##jog## depth = 125
+##jog## sample_point_list = 
+##jog## pf_fp = pf_isotropic_mono_HL18x24
+##jog## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##jog## water_surface_fp = sf_flat_mono_HL18x24
+##jog## bottom_reflec_diffuse_data = 0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7
+##jog## atten_data = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+##jog## scat_data = 1.0,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0.0
+
+##joh## depth = 1
+##joh## sample_point_list = 0,0.01,0.1,0.11,0.2,0.21,0.3,0.31,0.4,0.41,0.5,0.51,0.6,0.61,0.7,0.71,0.8,0.81,0.9,0.91,0.99,1.0
+##joh## pf_fp = pf_petzold_mono_HL18x24
+##joh## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##joh## water_surface_fp = sf_flat_mono_HL18x24
+##joh## bottom_reflec_diffuse_data = 0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7
+##joh## atten_data = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+##joh## scat_data = 1.0,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0.0
+
+##joi## depth = 5
+##joi## sample_point_list = 0,0.01,1.0,1.01,2.0,2.01,3.0,3.01,4.0,4.01,4.99,5.0
+##joi## pf_fp = pf_petzold_mono_HL18x24
+##joi## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##joi## water_surface_fp = sf_flat_mono_HL18x24
+##joi## bottom_reflec_diffuse_data = 0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7
+##joi## atten_data = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+##joi## scat_data = 1.0,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0.0
+
+##joj## depth = 25
+##joj## sample_point_list = 
+##joj## pf_fp = pf_petzold_mono_HL18x24
+##joj## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##joj## water_surface_fp = sf_flat_mono_HL18x24
+##joj## bottom_reflec_diffuse_data = 0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7
+##joj## atten_data = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+##joj## scat_data = 1.0,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0.0
+
+##jok## depth = 125
+##jok## sample_point_list = 
+##jok## pf_fp = pf_petzold_mono_HL18x24
+##jok## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##jok## water_surface_fp = sf_flat_mono_HL18x24
+##jok## bottom_reflec_diffuse_data = 0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7
+##jok## atten_data = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+##jok## scat_data = 1.0,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0.0
+
+##jol## depth = 5
+##jol## sample_point_list = 0,0.01,1.0,1.01,2.0,2.01,3.0,3.01,4.0,4.01,4.99,5.0
+##jol## pf_fp = pf_petzold_mono_HL18x24
+##jol## sky_fp = sky_hlideal_C0_rdif0.3_z30_a0_11_HL18x24
+##jol## water_surface_fp = sf_flat_mono_HL18x24
+##jol## bottom_reflec_diffuse_data = 0,0,0,0,0,0,0,0,0,0,0
+##jol## atten_data = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+##jol## scat_data = 1.0,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0.0
+
+# 100% bottom reflectance and only one run with 100% scattering
+##jos## depth = 125
+##jos## sample_point_list = 
+##jos## pf_fp = pf_isotropic_mono_HL18x24
+##jos## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##jos## water_surface_fp = sf_flat_mono_HL18x24
+##jos## bottom_reflec_diffuse_data = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+##jos## atten_data = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+##jos## scat_data = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+
+# variable wind speeds a=0.1 b=0.0
+##jowa## depth = 10
+##jowa## sample_point_list = 0,2,4,6,8,10
+##jowa## pf_fp = pf_petzold_mono_HL18x24
+##jowa## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+###jowa## water_surface_fp = rtab_fileout
+##jowa## water_surface_fp = sf_flat_mono_HL18x24
+##jowa## bottom_reflec_diffuse_data = 0,0,0,0,0,0,0,0,0,0,0
+##jowa## atten_data = 0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1
+##jowa## scat_data = 0,0,0,0,0,0,0,0,0,0,0
+
+# variable wind speeds a=0.1 b=0.0
+##jowb## depth = 10
+##jowb## sample_point_list = 0,2,4,6,8,10
+##jowb## pf_fp = pf_petzold_mono_HL18x24
+##jowb## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##jowb## water_surface_fp = sf_coxmunk_w0.5_r10_s2000_azavg_mono_HL18x24
+##jowb## bottom_reflec_diffuse_data = 0,0,0,0,0,0,0,0,0,0,0
+##jowb## atten_data = 0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1
+##jowb## scat_data = 0,0,0,0,0,0,0,0,0,0,0
+
+# variable wind speeds a=0.1 b=0.0
+##jowc## depth = 10
+##jowc## sample_point_list = 0,2,4,6,8,10
+##jowc## pf_fp = pf_petzold_mono_HL18x24
+##jowc## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##jowc## water_surface_fp = sf_coxmunk_w1_r10_s2000_azavg_mono_HL18x24
+###jowc## water_surface_fp = rtab_U1-1-azavg
+##jowc## bottom_reflec_diffuse_data = 0,0,0,0,0,0,0,0,0,0,0
+##jowc## atten_data = 0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1
+##jowc## scat_data = 0,0,0,0,0,0,0,0,0,0,0
+
+# variable wind speeds a=0.1 b=0.0
+##jowd## depth = 10
+##jowd## sample_point_list = 0,2,4,6,8,10
+##jowd## pf_fp = pf_petzold_mono_HL18x24
+##jowd## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##jowd## water_surface_fp = sf_coxmunk_w3_r10_s2000_azavg_mono_HL18x24
+###jowd## water_surface_fp = rtab_U3-1-azavg
+##jowd## bottom_reflec_diffuse_data = 0,0,0,0,0,0,0,0,0,0,0
+##jowd## atten_data = 0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1
+##jowd## scat_data = 0,0,0,0,0,0,0,0,0,0,0
+
+# variable wind speeds a=0.1 b=0.0
+##jowe## depth = 10
+##jowe## sample_point_list = 0,2,4,6,8,10
+##jowe## pf_fp = pf_petzold_mono_HL18x24
+##jowe## sky_fp = sky_hlideal_C0_rdif0.3_z0_a0_11_HL18x24
+##jowe## water_surface_fp = sf_coxmunk_w10_r10_s2000_azavg_mono_HL18x24
+###jowe## water_surface_fp = rtab_U10-1-azavg
+##jowe## bottom_reflec_diffuse_data = 0,0,0,0,0,0,0,0,0,0,0
+##jowe## atten_data = 0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1
+##jowe## scat_data = 0,0,0,0,0,0,0,0,0,0,0
+
+integrator = runga4
+runga4_steps_per_optical_depth = 20
+depth_code_prec = 2
+
+Ld_a_save_fp = out_<CODE>_data/Ld_a
+Lu_a_save_fp = out_<CODE>_data/Lu_a
+Ld_w_save_fp = out_<CODE>_data/Ld_w
+Lu_w_save_fp = out_<CODE>_data/Lu_w
+Ld_b_save_fp = out_<CODE>_data/Ld_b
+Lu_b_save_fp = out_<CODE>_data/Lu_b
+Lu_it_save_fp = out_<CODE>_data/Lu_it
+Ld_it_save_fp = out_<CODE>_data/Ld_it
+Lu_ir_save_fp = out_<CODE>_data/Lu_ir
+Ld_ir_save_fp = out_<CODE>_data/Ld_ir
+Ld_sample_save_fp = out_<CODE>_data/Ld_sample
+Lu_sample_save_fp = out_<CODE>_data/Lu_sample
+Ld_sample_image_save_fp=out_<CODE>_images/image_Ld_sample
+Lu_sample_image_save_fp=out_<CODE>_images/image_Lu_sample
+
+report_save_fp = report_<CODE>.txt
+
+# sample_point_delta_distance = 0.01

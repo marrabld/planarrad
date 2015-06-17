@@ -1,0 +1,8 @@
+load ang_data.txt ang_data
+load ang_data_ref.txt ang_data_ref
+negate ang_data_ref
+add ang_data_ref ang_data
+fabs ang_data
+save difference_data.txt ang_data
+count_greater_than ang_data 1E-6 count_out
+save count.txt count_out

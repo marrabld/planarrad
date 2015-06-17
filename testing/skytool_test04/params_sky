@@ -1,0 +1,19 @@
+# This sky is required for slabtool_test02.
+# It is the theta=30 degree sky design used in the series of HydrolLight runs.
+# In Djol00.txt line 1247 the quad averaged radiance in the solar quad is 3.56553E+01
+# For all other quads it appears to be 9.549e-02 to 4 s.f.
+# These are identical to 4 s.f. to the values calculated by skytool, see ang_data_ref.txt.
+
+band_count = 11
+partition = sphere
+vn = 18
+hn = 24
+theta_points = 0,5,15,25,35,45,55,65,75,85,90,95,105,115,125,135,145,155,165,175,180
+type = hlideal
+C = 0
+rdif = 0.3
+azimuth = 0
+zenith = 30
+sky_save_fp = sky_out
+sky_image_save_fp = image_out.ppm
+log_output_precision = 3

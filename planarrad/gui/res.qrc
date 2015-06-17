@@ -1,0 +1,14 @@
+ <!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+     <file>resources/crtr_logo_100x96.png</file>
+     <file>resources/nerc_logo_272x96.png</file>
+     <file>resources/close_bt_16x16.png</file>
+     <file>resources/topaxis_bt_16x16.png</file>
+     <file>resources/bottomaxis_bt_16x16.png</file>
+     <file>resources/leftaxis_bt_16x16.png</file>
+     <file>resources/rightaxis_bt_16x16.png</file>
+     <file>resources/logtop_bt_16x16.png</file>
+     <file>resources/logbottom_bt_16x16.png</file>
+     <file>../../resources/gpl_v3.html</file>
+ </qresource>
+ </RCC>

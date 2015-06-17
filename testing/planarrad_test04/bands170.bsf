@@ -1,0 +1,6 @@
+bs_name = 170 bands (400-740 nm)
+bs_code = 170
+band_count = 170
+band_centres_fp = bands170_cen.txt
+band_widths_fp = bands170_wid.txt
+preferred_default = no

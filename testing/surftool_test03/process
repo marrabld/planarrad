@@ -1,0 +1,35 @@
+#!/bin/bash
+
+
+function one_run {
+
+  local WINDSPEED=$1
+  local RAYCOUNT=$2
+  local SURFCOUNT=$3
+  local AZAVG_YN=$4
+
+  if [ "$AZAVG_YN" == "yes" ] 
+  then
+    local AZAVG_CODE="azavg_"
+  fi
+
+  sed -e "s|<WINDSPEED>|$WINDSPEED|g;s|<RC>|$RAYCOUNT|g;s|<SC>|$SURFCOUNT|g;s|<AZAVG_CODE>|$AZAVG_CODE|g;s|<AZAVG_YN>|$AZAVG_YN|g" params_template > params_temp
+
+  $JUDE2DIR/bin/surftool params=params_temp
+
+}
+
+# size is 200
+# 8 minutes for 20 surfaces 10 rays per quad
+
+# size is 200
+# 1.25 minutes for 20 surfaces 10 rays per quad - maybe do 2000 - approx 2hrs
+
+one_run 0 1000 1 yes
+#one_run 0.5 10 200 yes
+#one_run 1 10 2000 yes
+#one_run 3 10 2000 yes
+#one_run 10 10 2000 yes
+
+
+#one_run 10

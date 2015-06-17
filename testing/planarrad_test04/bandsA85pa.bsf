@@ -1,0 +1,4 @@
+bs_name = ACS-a 85 bands (Palau)
+bs_code = A85pa
+band_count = 85
+band_centres_fp = bandsA85pa_cen.txt

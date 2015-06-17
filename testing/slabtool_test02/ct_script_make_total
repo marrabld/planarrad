@@ -1,0 +1,4 @@
+load temp/temp_diffuse tab1
+load temp/temp_direct tab2
+add tab1 tab2
+save temp/temp_total

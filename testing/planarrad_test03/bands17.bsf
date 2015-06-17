@@ -1,0 +1,6 @@
+bs_name = 17 Bands (400-740 nm)
+bs_code = 17
+band_count = 17
+band_widths_data = 20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20
+band_centres_data = 410,430,450,470,490,510,530,550,570,590,610,630,650,670,690,710,730
+preferred_default = yes

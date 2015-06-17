@@ -1,0 +1,49 @@
+
+CXX = gcc
+CXXFLAGS = -g -O -Wall
+LINKER = gcc
+
+#	archivestream.o \
+#	autoconfig.o \
+#	chanconfig.o \
+#	filestream.o \
+
+LIBWL_OBJS = \
+	archivefile.o \
+	archivepacket.o \
+	config.o \
+	llist.o \
+	mergelist.o \
+	record.o \
+	record_acs.o \
+	record_ctd.o \
+	record_ecobb3.o \
+	record_merge.o \
+	record_text.o \
+	sensor.o \
+	sensor_acs.o \
+	sensor_ctd.o \
+	sensor_ecobb3.o \
+	sensor_text.o \
+	textutils.o
+
+TEST_OBJS = test.o
+
+obj/%.o: %.cc
+	${CXX} ${CXXFLAGS} -c $< -o $@
+
+all: libwl test
+
+dirs:
+	mkdir -p obj
+
+libwl: dirs $(addprefix obj/,${LIBWL_OBJS})
+	cd obj && ar -cr libwl.a $(LIBWL_OBJS)
+
+test: dirs libwl $(addprefix obj/,${TEST_OBJS})
+	cd obj && ${LINKER} ${LINK_OPTS} ${TEST_OBJS} libwl.a -lstdc++ -o ../../test 
+
+clean:
+	rm -f test
+	rm obj/*.o
+	rm obj/*.a

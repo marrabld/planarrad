@@ -1,0 +1,6 @@
+ <!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+     <file>resources/fsf_logo_390x96.png</file>
+     <file>../../resources/gpl_v3.html</file>
+ </qresource>
+ </RCC>

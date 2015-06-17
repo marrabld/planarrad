@@ -1,0 +1,52 @@
+#!/bin/sh
+
+function one_test {
+
+  local NAME=$1
+  local DIR=$2
+
+  echo -n "Testing skytool"$POSTFIX" ("$NAME")... "
+
+  cd $DIR
+
+  local RTN=0
+
+  ../../skytool/skytool$POSTFIX verbose=2 params=params_sky >> ../test_log.txt 2>&1
+  if [ $? != 0 ]; then RTN=1; fi
+
+  ../../filetool/filetool$POSTFIX verbose=2 params=params_ang sky_out >> ../test_log.txt 2>&1
+  if [ $? != 0 ]; then RTN=1; fi
+
+  ../../calctool/calctool$POSTFIX verbose=2 script_fp=ct_script >> ../test_log.txt 2>&1
+  if [ $? != 0 ]; then RTN=1; fi
+
+  if [ `cat count.txt` != "0.0000e+00" ]; then RTN=1; fi
+
+  if [ $RTN == 0 ]; then
+    echo "Pass."
+  else
+    echo "Fail."
+  fi
+
+  let FAIL_COUNT=$FAIL_COUNT+$RTN
+
+  cd ..
+}
+
+
+FAIL_COUNT=0
+POSTFIX=""
+
+
+one_test test01 skytool_test01
+one_test test02 skytool_test02
+one_test test03 skytool_test03
+one_test test04 skytool_test04
+
+
+
+if [ $FAIL_COUNT == 0 ]; then
+  exit 0
+else
+  exit 1
+fi

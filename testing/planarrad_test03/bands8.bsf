@@ -1,0 +1,5 @@
+bs_name = 8 bands (400-720 nm)
+bs_code = 8
+band_count = 8
+band_centres = 420,460,500,540,580,620,660,700
+band_widths = 40,40,40,40,40,40,40,40

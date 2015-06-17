@@ -1,0 +1,6 @@
+verbose = 1
+ang_data_save_fp = ang_data.txt
+ang_phi_min = 0
+ang_phi_max = 345
+ang_phi_steps = 23
+ang_theta_data = 0,10,20,30,40,50,60,70,80,87.5

@@ -1,0 +1,27 @@
+set autoscale
+unset log
+unset label
+set key spacing 1.2
+set key right top
+set key samplen 2
+set terminal x11
+set xrange [ 400 : 740 ]
+set yrange [ -0.1 : 1.1 ]
+set ytics ( 0, 0.2, 0.4, 0.6, 0.8, 1.0 )
+set xtic 50
+set xlabel "Wavelength (nm)"
+set ylabel "Value"
+set format x
+set format y "%.1f"
+set line style 1 lt 1 lw 1 pt 0
+set line style 2 lt 1 lw 2 pt 0
+
+set out "bandspec_testing_plot2.eps"
+set terminal postscript eps enhanced mono lw 2 "Arial 10"
+set size 0.45,0.6
+plot \
+"data2.txt" index 0 using 1:2 ls 1 with lines title "original", \
+"data2.txt" index 1 using 1:2 ls 2 with lines title "resamp."
+
+set terminal x11
+set size 1,1

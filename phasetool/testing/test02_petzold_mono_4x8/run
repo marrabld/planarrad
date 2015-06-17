@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Petzold's phase function in one band
+# 4 x 8 directional structure
+
+# set the verbosity level to '2' if not specified
+if [ -n "$1" ]; then VB=$1; else VB=2; fi
+
+$JUDE2DIR/bin/phasetool \
+    verbose=$VB \
+    band_count=1 \
+    partition=sphere \
+    vn=4 \
+    hn=8 \
+    type=petzold \
+    sub_quad_count=10000 \
+    phase_func_save_fp=pf_petzold_mono_4x8

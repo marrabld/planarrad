@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# flat water surface in one band
+# HL 18x24 directional structure
+ 
+# set the verbosity level to '2' if not specified
+if [ -n "$1" ]; then VB=$1; else VB=2; fi
+
+$JUDE2DIR/bin/surftool \
+    verbose=$VB \
+    band_count=1 \
+    partition=sphere \
+    vn=18 \
+    hn=24 \
+    theta_points=0,5,15,25,35,45,55,65,75,85,90,95,105,115,125,135,145,155,165,175,180 \
+    type=flat \
+    refrac_index_0=1.33 \
+    refrac_index_1=1 \
+    sub_quad_count=10000000 \
+    surface_save_fp=sf_flat_mono_HL18x24

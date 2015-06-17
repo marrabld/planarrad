@@ -1,0 +1,4 @@
+ang_phi_min = 0
+ang_phi_max = 315
+ang_phi_steps = 7
+ang_theta_data = 0,36,72

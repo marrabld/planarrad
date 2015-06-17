@@ -1,0 +1,291 @@
+
+
+     ========================================================
+     |                                                      |
+     |        HYDROLIGHT Version 4.2  (MAIN CODE)           |
+     |    Copyright (c) 1992-2004 by Curtis D. Mobley       |
+     |                                                      |
+     | THIS PROGRAM IS EXPERIMENTAL AND IS LICENSED "AS IS" |
+     | WITHOUT REPRESENTATION OF WARRANTY OF ANY KIND,      |
+     | EITHER EXPRESS OR IMPLIED.  THE ENTIRE RISK AS TO    |
+     | THE QUALITY AND PERFORMANCE OF HYDROLIGHT IS WITH    |
+     | THE USER.  HYDROLIGHT IS NOT FAULT TOLERANT.         |
+     |                                                      |
+     ========================================================
+
+
+
+  RUN TITLE:  jow01                                                                                                                   
+
+  Run started on 11/17/2006 at 03:47:46.5
+
+ 
+  Chlorophyll fluorescence is not included in this run
+  CDOM fluorescence is not included in this run
+  Raman scattering is not included in this run
+
+
+  The radiance distribution is computed on the following (Theta,Phi,Depth,Wavelength) grid:
+
+         I     Theta      Mu           J      Phi          K      zeta       z           L    Lambda
+               (deg)                         (deg)                          (m)                (nm)
+
+         1    87.500    0.0436         1      0.00         1     0.000                   1    500.00
+         2    80.000    0.1730         2     15.00         2     0.010                              
+         3    70.000    0.3407         3     30.00         3     0.100                              
+         4    60.000    0.4981         4     45.00         4     0.110                              
+         5    50.000    0.6403         5     60.00         5     0.200                              
+         6    40.000    0.7631         6     75.00         6     0.210                              
+         7    30.000    0.8627         7     90.00         7     0.300                              
+         8    20.000    0.9361         8    105.00         8     0.310                              
+         9    10.000    0.9811         9    120.00         9     0.400                              
+        10     0.000    0.9981        10    135.00        10     0.410                              
+                                      11    150.00        11     0.500                              
+                                      12    165.00        12     0.510                              
+                                      13    180.00        13     0.600                              
+                                      14    195.00        14     0.610                              
+                                      15    210.00        15     0.700                              
+                                      16    225.00        16     0.710                              
+                                      17    240.00        17     0.800                              
+                                      18    255.00        18     0.810                              
+                                      19    270.00        19     0.900                              
+                                      20    285.00        20     0.910                              
+                                      21    300.00        21     0.990                              
+                                      22    315.00        22     1.000                              
+                                      23    330.00                                                  
+                                      24    345.00                                                  
+
+
+  The air-water surface is for a wind speed of  1.0 m/s
+
+  The bottom boundary is an opaque reflecting surface at depth   1.00 m
+
+  Initialization of Hydrolight Completed in  0.4 sec.
+
+
+
+  * * * * * Output for wavelength band  1 (499.5 to 500.5 nm; nominal wavelength = 500.0 nm)  * * * * *
+
+  The phase function for component  1 comes from a file titled
+     Petzold "average particle" from L&W Table 3.10; standard quad partition; 7 Sept 98                                      
+
+  The "ab" routine "abconst" is being used.
+
+  Constant absorption and scattering coefficients are used:
+
+     The absorption coefficient is a =  0.1000 1/m
+
+     The scattering coefficient is b =  0.0000 1/m
+
+
+  Absorption Coefficients of Individual Components
+
+  iz   Opt Depth  Geo Depth   Comp 1    Total                                                                                                                                                           
+                     (m)      (1/m)     (1/m)                                                                                                                                                           
+
+   1     0.000      0.000     0.1000   0.1000
+   3     0.100      1.000     0.1000   0.1000
+   5     0.200      2.000     0.1000   0.1000
+   7     0.300      3.000     0.1000   0.1000
+   9     0.400      4.000     0.1000   0.1000
+  11     0.500      5.000     0.1000   0.1000
+  13     0.600      6.000     0.1000   0.1000
+  15     0.700      7.000     0.1000   0.1000
+  17     0.800      8.000     0.1000   0.1000
+  19     0.900      9.000     0.1000   0.1000
+  22     1.000     10.000     0.1000   0.1000
+
+
+  Scattering Coefficients of Individual Components
+
+  iz   Opt Depth  Geo Depth   Comp 1    Total                                                                                                                                                           
+                     (m)      (1/m)     (1/m)                                                                                                                                                           
+
+   1     0.000      0.000     0.0000   0.0000
+   3     0.100      1.000     0.0000   0.0000
+   5     0.200      2.000     0.0000   0.0000
+   7     0.300      3.000     0.0000   0.0000
+   9     0.400      4.000     0.0000   0.0000
+  11     0.500      5.000     0.0000   0.0000
+  13     0.600      6.000     0.0000   0.0000
+  15     0.700      7.000     0.0000   0.0000
+  17     0.800      8.000     0.0000   0.0000
+  19     0.900      9.000     0.0000   0.0000
+  22     1.000     10.000     0.0000   0.0000
+
+
+  Backscattering Coefficients of Individual Components
+ (computed from the scattering coefficients and the phase functions)
+
+  iz   Opt Depth  Geo Depth   Comp 1    Total                                                                                                                                                           
+                     (m)      (1/m)     (1/m)                                                                                                                                                           
+
+   1     0.000      0.000    0.00000  0.00000
+   3     0.100      1.000    0.00000  0.00000
+   5     0.200      2.000    0.00000  0.00000
+   7     0.300      3.000    0.00000  0.00000
+   9     0.400      4.000    0.00000  0.00000
+  11     0.500      5.000    0.00000  0.00000
+  13     0.600      6.000    0.00000  0.00000
+  15     0.700      7.000    0.00000  0.00000
+  17     0.800      8.000    0.00000  0.00000
+  19     0.900      9.000    0.00000  0.00000
+  22     1.000     10.000    0.00000  0.00000
+
+  Summary of Inherent Optical Properties
+
+  iz   Opt Depth  Geo Depth   total a   total b    total c    albedo   total bb  total bb/b
+                     (m)        (1/m)     (1/m)      (1/m)               (1/m)
+
+   1     0.000      0.000      0.1000    0.0000     0.1000    0.0000    0.00000-NaN       
+   3     0.100      1.000      0.1000    0.0000     0.1000    0.0000    0.00000-NaN       
+   5     0.200      2.000      0.1000    0.0000     0.1000    0.0000    0.00000-NaN       
+   7     0.300      3.000      0.1000    0.0000     0.1000    0.0000    0.00000-NaN       
+   9     0.400      4.000      0.1000    0.0000     0.1000    0.0000    0.00000-NaN       
+  11     0.500      5.000      0.1000    0.0000     0.1000    0.0000    0.00000-NaN       
+  13     0.600      6.000      0.1000    0.0000     0.1000    0.0000    0.00000-NaN       
+  15     0.700      7.000      0.1000    0.0000     0.1000    0.0000    0.00000-NaN       
+  17     0.800      8.000      0.1000    0.0000     0.1000    0.0000    0.00000-NaN       
+  19     0.900      9.000      0.1000    0.0000     0.1000    0.0000    0.00000-NaN       
+  22     1.000     10.000      0.1000    0.0000     0.1000    0.0000    0.00000-NaN       
+
+  Normalized sky radiances are computed using sky model "COSRAD"
+     (COSine RADiance model)
+
+     with parameters:
+
+     Rsky = ratio of sky to total plane irradiance = 0.300
+
+     C = cosine parameter = 0.000
+
+     Edtotl = total (sun + sky) Ed in W/(m^2 nm) =    1.000
+
+  Sky irradiances are computed using sky irradiance model "COSIRRAD"
+     (COSine IRRADiances; for use with the COSRAD model)
+          diffuse (sky) spectral plane irradiance Ed(diffuse) =   3.000E-01 W/(m^2 nm)
+          direct (sun) spectral plane irradiance Ed(direct) =     7.000E-01 W/(m^2 nm)
+          total (sun + sky) spectral plane irradiance Ed(total) = 1.000E+00 W/(m^2 nm)
+          ratio of sky to total plane irradiance, Rsky = 0.300
+
+     The sun is placed in quad Q(r,s) = Q(10, 1) centered at (theta, phi) = ( 0.000,  0.000)
+
+     Check on the sky radiance initialization:
+      total Ed from integrating the sky radiance = 1.0000E+00
+      total Ed from the sky irradiance model     = 1.0000E+00
+
+  The bottom bidirectional reflectance distribution function (BRDF) is Lambertian:
+
+   BRDF(mu',phi',mu,phi) = R/pi
+
+  The bottom reflectance at wavelength 500.0 nm is R = 0.000
+
+
+
+  Irradiances (units of W/m^2 nm), Mean Cosines (Mubars), and Irradiance Reflectance
+
+   iz   zeta   z(m)        Eou            Eod             Eo             Eu             Ed       MUBARu   MUBARd    MUBAR      R = Eu/Ed
+
+           in air       1.2185E-01     1.3013E+00     1.4232E+00     3.5666E-02     1.0000E+00   0.2927   0.7684   0.6776     3.5666E-02
+
+    1   0.00   0.00     0.0000E+00     1.0216E+00     1.0216E+00     0.0000E+00     9.6411E-01-NaN        0.9437   0.9437     0.0000E+00
+    3   0.10   1.00     0.0000E+00     9.1762E-01     9.1762E-01     0.0000E+00     8.6725E-01-NaN        0.9451   0.9451     0.0000E+00
+    5   0.20   2.00     0.0000E+00     8.2444E-01     8.2444E-01     0.0000E+00     7.8023E-01-NaN        0.9464   0.9464     0.0000E+00
+    7   0.30   3.00     0.0000E+00     7.4086E-01     7.4086E-01     0.0000E+00     7.0204E-01-NaN        0.9476   0.9476     0.0000E+00
+    9   0.40   4.00     0.0000E+00     6.6586E-01     6.6586E-01     0.0000E+00     6.3177E-01-NaN        0.9488   0.9488     0.0000E+00
+   11   0.50   5.00     0.0000E+00     5.9856E-01     5.9856E-01     0.0000E+00     5.6861E-01-NaN        0.9500   0.9500     0.0000E+00
+   13   0.60   6.00     0.0000E+00     5.3815E-01     5.3815E-01     0.0000E+00     5.1183E-01-NaN        0.9511   0.9511     0.0000E+00
+   15   0.70   7.00     0.0000E+00     4.8391E-01     4.8391E-01     0.0000E+00     4.6078E-01-NaN        0.9522   0.9522     0.0000E+00
+   17   0.80   8.00     0.0000E+00     4.3520E-01     4.3520E-01     0.0000E+00     4.1486E-01-NaN        0.9533   0.9533     0.0000E+00
+   19   0.90   9.00     0.0000E+00     3.9146E-01     3.9146E-01     0.0000E+00     3.7357E-01-NaN        0.9543   0.9543     0.0000E+00
+   22   1.00  10.00     0.0000E+00     3.5216E-01     3.5216E-01     0.0000E+00     3.3642E-01-NaN        0.9553   0.9553     0.0000E+00
+
+
+
+  Selected Radiances (units of W/m^2 sr nm) and Radiance-Irradiance Ratios
+
+  [Here (theta,phi) are directions of photon travel relative to nadir (solar photons travel along phi=180).]
+
+   iz   zeta     z       Lu(z)        Ld(z)    Lh(z,phi=0)  Lh(z,phi=90) Lh(z,phi=180)    Lu/Ed      Q = Eu/Lu      Lw(z)     Rrs = Lw/Ed
+                (m)   (theta=180)   (theta=0)   (theta=90)   (theta=90)   (theta=90)      (1/sr)       (sr)      (theta=180)    (1/sr)
+
+           in air      1.673E-01    2.943E+01    8.635E-02    8.756E-02    8.635E-02    1.673E-01    2.131E-01    0.000E+00    0.000E+00
+    1   0.00   0.00    0.000E+00    2.867E+01    8.017E-05    7.727E-05    8.017E-05    0.000E+00-NaN         
+    3   0.10   1.00    0.000E+00    2.594E+01    8.089E-06    7.796E-06    8.089E-06    0.000E+00-NaN         
+    5   0.20   2.00    0.000E+00    2.347E+01    8.144E-07    7.849E-07    8.143E-07    0.000E+00-NaN         
+    7   0.30   3.00    0.000E+00    2.123E+01    8.208E-08    7.911E-08    8.207E-08    0.000E+00-NaN         
+    9   0.40   4.00    0.000E+00    1.921E+01    8.272E-09    7.973E-09    8.272E-09    0.000E+00-NaN         
+   11   0.50   5.00    0.000E+00    1.738E+01    8.337E-10    8.036E-10    8.337E-10    0.000E+00-NaN         
+   13   0.60   6.00    0.000E+00    1.572E+01    8.403E-11    8.099E-11    8.403E-11    0.000E+00-NaN         
+   15   0.70   7.00    0.000E+00    1.422E+01    8.469E-12    8.163E-12    8.469E-12    0.000E+00-NaN         
+   17   0.80   8.00    0.000E+00    1.286E+01    8.536E-13    8.227E-13    8.535E-13    0.000E+00-NaN         
+   19   0.90   9.00    0.000E+00    1.164E+01    8.603E-14    8.292E-14    8.603E-14    0.000E+00-NaN         
+   22   1.00  10.00    0.000E+00    1.053E+01    8.671E-15    8.357E-15    8.670E-15    0.000E+00-NaN         
+
+
+
+  K-functions (units of 1/meter) (valid only when zupper and zlower are closely spaced)
+
+    zupper    zlower       z      Kou(z)    Kod(z)    Ko(z)     Ku(z)     Kd(z)    Knet(z)    KLu(z)
+
+     0.000     0.100     0.050-NaN         0.10760   0.10760-NaN         0.10596   0.10596-NaN      
+     1.000     1.100     1.050-NaN         0.10718   0.10718-NaN         0.10580   0.10580-NaN      
+     2.000     2.100     2.050-NaN         0.10697   0.10697-NaN         0.10566   0.10566-NaN      
+     3.000     3.100     3.050-NaN         0.10680   0.10680-NaN         0.10552   0.10552-NaN      
+     4.000     4.100     4.050-NaN         0.10663   0.10663-NaN         0.10539   0.10539-NaN      
+     5.000     5.100     5.050-NaN         0.10646   0.10646-NaN         0.10526   0.10526-NaN      
+     6.000     6.100     6.050-NaN         0.10631   0.10631-NaN         0.10514   0.10514-NaN      
+     7.000     7.100     7.050-NaN         0.10615   0.10615-NaN         0.10501   0.10501-NaN      
+     8.000     8.100     8.050-NaN         0.10600   0.10600-NaN         0.10490   0.10490-NaN      
+     9.000     9.100     9.050-NaN         0.10586   0.10586-NaN         0.10478   0.10478-NaN      
+     9.900    10.000     9.950-NaN         0.10573   0.10573-NaN         0.10468   0.10468-NaN      
+
+
+
+  Radiances Just Above the Water Surface (at z = a) (units of W/m^2 sr nm)
+
+   [(Theta,Phi) are the directions of photon travel.
+   Theta is measured from 0 at the zenith.
+   Solar photons travel in the Phi = 180 direction (the sun is located at Phi = 0).
+   (Thus Phi = 45 represents the 135 degree viewing angle for minimizing sun glitter.)]
+
+   I   J    Theta      Phi  Phi-view      L(sky)      L(water-lv)    L(refl-sky)    L(total up)       Rrs           rho
+           (zenith)                                                                                             (Lrefl/Lsky)
+  10   1      0.0      0.0      0.0    2.94286E+01    0.00000E+00    1.67339E-01    1.67339E-01    0.00000E+00    0.005686
+   9   1     10.0      0.0    180.0    9.54945E-02    0.00000E+00    5.58427E-02    5.58427E-02    0.00000E+00    0.584774
+   9   4     10.0     45.0    135.0    9.54922E-02    0.00000E+00    5.61883E-02    5.61883E-02    0.00000E+00    0.588407
+   9   7     10.0     90.0     90.0    9.54934E-02    0.00000E+00    5.53239E-02    5.53239E-02    0.00000E+00    0.579348
+   8   1     20.0      0.0    180.0    9.54944E-02    0.00000E+00    4.35155E-03    4.35155E-03    0.00000E+00    0.045569
+   8   4     20.0     45.0    135.0    9.54921E-02    0.00000E+00    4.31749E-03    4.31749E-03    0.00000E+00    0.045213
+   8   7     20.0     90.0     90.0    9.54933E-02    0.00000E+00    4.13336E-03    4.13336E-03    0.00000E+00    0.043284
+   7   1     30.0      0.0    180.0    9.54947E-02    0.00000E+00    2.09779E-03    2.09779E-03    0.00000E+00    0.021968
+   7   4     30.0     45.0    135.0    9.54924E-02    0.00000E+00    2.12643E-03    2.12643E-03    0.00000E+00    0.022268
+   7   7     30.0     90.0     90.0    9.54936E-02    0.00000E+00    2.10438E-03    2.10438E-03    0.00000E+00    0.022037
+   6   1     40.0      0.0    180.0    9.54942E-02    0.00000E+00    2.41092E-03    2.41092E-03    0.00000E+00    0.025247
+   6   4     40.0     45.0    135.0    9.54919E-02    0.00000E+00    2.41649E-03    2.41649E-03    0.00000E+00    0.025306
+   6   7     40.0     90.0     90.0    9.54931E-02    0.00000E+00    2.43296E-03    2.43296E-03    0.00000E+00    0.025478
+   5   1     50.0      0.0    180.0    9.54942E-02    0.00000E+00    3.32926E-03    3.32926E-03    0.00000E+00    0.034864
+   5   4     50.0     45.0    135.0    9.54919E-02    0.00000E+00    3.33096E-03    3.33096E-03    0.00000E+00    0.034882
+   5   7     50.0     90.0     90.0    9.54931E-02    0.00000E+00    3.32778E-03    3.32778E-03    0.00000E+00    0.034848
+   4   1     60.0      0.0    180.0    9.54943E-02    0.00000E+00    5.80530E-03    5.80530E-03    0.00000E+00    0.060792
+   4   4     60.0     45.0    135.0    9.54920E-02    0.00000E+00    5.82617E-03    5.82617E-03    0.00000E+00    0.061012
+   4   7     60.0     90.0     90.0    9.54932E-02    0.00000E+00    5.79694E-03    5.79694E-03    0.00000E+00    0.060705
+   3   1     70.0      0.0    180.0    9.54945E-02    0.00000E+00    1.27175E-02    1.27175E-02    0.00000E+00    0.133176
+   3   4     70.0     45.0    135.0    9.54922E-02    0.00000E+00    1.27104E-02    1.27104E-02    0.00000E+00    0.133104
+   3   7     70.0     90.0     90.0    9.54934E-02    0.00000E+00    1.27367E-02    1.27367E-02    0.00000E+00    0.133377
+   2   1     80.0      0.0    180.0    9.54943E-02    0.00000E+00    3.53321E-02    3.53321E-02    0.00000E+00    0.369992
+   2   4     80.0     45.0    135.0    9.54919E-02    0.00000E+00    3.51682E-02    3.51682E-02    0.00000E+00    0.368285
+   2   7     80.0     90.0     90.0    9.54931E-02    0.00000E+00    3.52867E-02    3.52867E-02    0.00000E+00    0.369521
+   1   1     87.5      0.0    180.0    9.54945E-02    0.00000E+00    7.72093E-02    7.72093E-02    0.00000E+00    0.808521
+   1   4     87.5     45.0    135.0    9.54922E-02    0.00000E+00    7.92316E-02    7.92316E-02    0.00000E+00    0.829718
+   1   7     87.5     90.0     90.0    9.54933E-02    0.00000E+00    7.96358E-02    7.96358E-02    0.00000E+00    0.833941
+
+  subroutine savedata:  file ..\output\digital\Djow01.txt written
+  subroutine wrtxcel1:  file ..\output\excel\Sjow01.txt written
+     Waveband   1 of   1 completed in    0.4 sec.
+
+  subroutine wrtxcelM:  file ..\output\excel\Mjow01.txt written
+
+  Run completed on 11/17/2006 at 03:47:47.3
+
+
+  Total (wall clock) run time =          0.8 sec

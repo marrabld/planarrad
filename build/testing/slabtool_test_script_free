@@ -1,0 +1,206 @@
+#!/bin/bash
+
+
+function compare_angular_data {
+
+  local SRCDATA=$1
+  local REFDATA=$2
+  local OUTDATA=$3
+  local THRESH=$4
+ 
+  sed -e "s|<SRCDATA>|$SRCDATA|g;s|<REFDATA>|$REFDATA|g;s|<OUTDATA>|$OUTDATA|g;s|<THRESH>|$THRESH|g" ct_script_template > ct_script
+  ../../calctool/calctool$POSTFIX verbose=2 script_fp=ct_script >> ../test_log.txt 2>&1
+  if [ $? != 0 ]; then RTN=1; fi
+
+  if [ `cat count.txt` != "0.0000e+00" ]; then RTN=1; fi
+}
+
+
+
+function one_run {
+
+  local INTEG=$1
+  local PF=$2
+  local SURF=$3
+  local SUBS=$4
+  local DEPTH=$5
+
+  cd slabtool_test01
+
+  RTN=0
+
+  if [ $INTEG == "basic" ]
+  then
+    INTEG_TYPE="basic_integrate"
+  elif [ $INTEG == "dft" ]
+  then
+    INTEG_TYPE="integrate"
+  fi
+
+  if [ $PF == "petzold" ]
+  then
+    PF_FILE=pf_petzold_mono_4x8
+  elif [ $PF == "forward" ]
+  then
+    PF_FILE=pf_forward_mono_4x8
+  elif [ $PF == "bandf" ]
+  then
+    PF_FILE=pf_bandf_mono_4x8
+  fi
+
+  if [ $SURF == "absent" ]
+  then
+    SURF_FILE=sf_absent_mono_4x8
+  elif [ $SURF == "flat" ]
+  then
+    SURF_FILE=sf_flat_mono_4x8
+  elif [ $SURF == "mirror" ]
+  then
+    SURF_FILE=sf_mirror_mono_4x8
+  fi
+
+  local INTEG_STEPS=500
+
+  local CODE=$INTEG"_"$PF"_"$SURF"_"$SUBS"_"$DEPTH"m"
+
+  echo -n "Testing slabtool (test01 - "$CODE")... ";
+
+  local OUTDIR="out_"$CODE
+
+  mkdir -p $OUTDIR
+
+  ../../slabtool/slabtool$POSTFIX \
+    verbose=3 \
+    band_count=1 \
+    solution=$INTEG_TYPE \
+    integrator=euler \
+    basic_usteps_per_optical_depth=$INTEG_STEPS \
+    basic_dsteps_per_optical_depth=$INTEG_STEPS \
+    euler_steps_per_optical_depth=$INTEG_STEPS \
+    partition=sphere \
+    vn=4 \
+    hn=8 \
+    depth=$DEPTH \
+    sample_point_distance=$DEPTH \
+    sky_fp=sky_spec_z45_a50_mono_4x8 \
+    water_surface_fp=$SURF_FILE \
+    atten_data=1 \
+    scat_data=0.5 \
+    pf_fp=$PF_FILE \
+    bottom_reflec_diffuse_data=0 \
+    Ld_b_image_save_fp=$OUTDIR/image_Ld_b.ppm \
+    Ld_b_image_sens_k=1.0 \
+    Lu_b_image_save_fp=$OUTDIR/image_Lu_b.ppm \
+    Lu_b_image_sens_k=1.0 \
+    Ld_a_image_save_fp=$OUTDIR/image_Ld_a.ppm \
+    Ld_a_image_sens_k=1.0 \
+    Lu_a_image_save_fp=$OUTDIR/image_Lu_a.ppm \
+    Lu_a_image_sens_k=5.0 \
+    Ld_w_image_save_fp=$OUTDIR/image_Ld_w.ppm \
+    Ld_w_image_sens_k=1.0 \
+    Lu_w_image_save_fp=$OUTDIR/image_Lu_w.ppm \
+    Lu_w_image_sens_k=1.0 \
+    Ld_it_image_save_fp=$OUTDIR/image_Ld_it.ppm \
+    Ld_it_image_sens_k=1.0 \
+    Lu_it_image_save_fp=$OUTDIR/image_Lu_it.ppm \
+    Lu_it_image_sens_k=5.0 \
+    Ld_ir_image_save_fp=$OUTDIR/image_Ld_ir.ppm \
+    Ld_ir_image_sens_k=1.0 \
+    Lu_ir_image_save_fp=$OUTDIR/image_Lu_ir.ppm \
+    Lu_ir_image_sens_k=5.0 \
+    Lu_w_save_fp=$OUTDIR/Lu_w_data \
+    Ld_b_save_fp=$OUTDIR/Ld_b_data \
+    report_save_fp=$OUTDIR/report.txt >> ../test_log.txt 2>&1
+
+  if [ $? != 0 ]; then RTN=1; fi
+
+  ../../filetool/filetool$POSTFIX verbose=2 params=params_ang ang_data_save_fp=$OUTDIR/Lu_w_ang_data.txt $OUTDIR/Lu_w_data >> ../test_log.txt 2>&1
+  if [ $? != 0 ]; then RTN=1; fi
+
+  ../../filetool/filetool$POSTFIX verbose=2 params=params_ang ang_data_save_fp=$OUTDIR/Ld_b_ang_data.txt $OUTDIR/Ld_b_data >> ../test_log.txt 2>&1
+  if [ $? != 0 ]; then RTN=1; fi
+
+  # compare to reference data
+  compare_angular_data $OUTDIR/Lu_w_ang_data.txt $OUTDIR/Lu_w_ang_data.txt $OUTDIR/Lu_w_difference.txt 1E-6
+  compare_angular_data $OUTDIR/Ld_b_ang_data.txt $OUTDIR/Ld_b_ang_data.txt $OUTDIR/Ld_b_difference.txt 1E-6
+
+  if [ $RTN == 0 ]; then
+    echo "Pass."
+  else
+    echo "Fail."
+  fi
+
+  cd ..
+}
+
+
+
+function cross_test {
+
+  local INTEG1=$1
+  local INTEG2=$2
+  local PF=$3
+  local SURF=$4
+  local SUBS=$5
+  local DEPTH=$6
+  local THRESH=$7
+
+  cd slabtool_test01
+
+  local CODE=$PF"_"$SURF"_"$SUBS"_"$DEPTH"m"
+
+  echo -n "Testing slabtool (test01 - "$INTEG1" vs. "$INTEG2" "$CODE")... ";
+
+  local OUTDIR1="out_"$INTEG1"_"$CODE
+  local OUTDIR2="out_"$INTEG2"_"$CODE
+
+  compare_angular_data $OUTDIR1/Lu_w_ang_data.txt $OUTDIR2/Lu_w_ang_data.txt $OUTDIR1"/Lu_w_difference_"$INTEG1"_"$INTEG2".txt" $THRESH
+  compare_angular_data $OUTDIR1/Ld_b_ang_data.txt $OUTDIR2/Ld_b_ang_data.txt $OUTDIR1"/Ld_b_difference_"$INTEG1"_"$INTEG2".txt" $THRESH
+
+  if [ $RTN == 0 ]; then
+    echo "Pass."
+  else
+    echo "Fail."
+  fi
+
+  cd ..
+}
+
+
+
+FAIL_COUNT=0
+RTN=0
+POSTFIX=""
+ 
+
+#one_run basic forward absent black 1
+#one_run dft forward absent black 1
+# this fails because the dft intrdouces very small values which should be zero - hence 100% error
+# cross_test basic dft forward absent black 1 2E-3
+
+#one_run basic forward mirror black 1
+#one_run dft forward mirror black 1
+
+one_run basic bandf absent black 1
+one_run dft bandf absent black 1
+exit
+one_run basic forward flat black 1
+one_run dft forward flat black 1
+# this fails because the dft intrdouces very small values which should be zero - hence 100% error
+# cross_test basic dft forward absent black 1 2E-3
+
+one_run basic petzold absent black 1
+one_run dft petzold absent black 1
+cross_test basic dft petzold absent black 1 2E-3
+
+one_run basic petzold flat black 1
+one_run dft petzold flat black 1
+cross_test basic dft petzold flat black 1 2E-3
+exit
+ 
+
+if [ $FAIL_COUNT == 0 ]; then
+  exit 0
+else
+  exit 1
+fi

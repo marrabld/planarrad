@@ -1,0 +1,809 @@
+#!/bin/bash
+
+
+function calc_slab {
+
+  local CODE=$1
+
+  rm -rf "out_"$CODE"_data"
+  rm -rf "out_"$CODE"_images"
+
+  mkdir -p "out_"$CODE"_data"
+  mkdir -p "out_"$CODE"_images"
+
+  sed -e "s|##$CODE##||g;s|<CODE>|$CODE|g" params_slab_template > temp/params_temp
+
+  $JUDE2DIR/bin/slabtool$POSTFIX params=temp/params_temp
+}
+
+
+
+function make_angular_data {
+
+  local CODE=$1
+  local SRCFILE=$2
+
+  local ANGDATAFWD="ang_"$CODE"_data/"$SRCFILE"_fwd"
+  local ANGDATACROSS="ang_"$CODE"_data/"$SRCFILE"_cross"
+
+  mkdir -p "ang_"$CODE"_data"
+
+  $JUDE2DIR/bin/filetool$POSTFIX \
+	verbose=1 \
+	params=params_ang_fwd \
+	ang_data_save_fp=$ANGDATAFWD \
+	"out_"$CODE"_data/"$SRCFILE
+
+# >> ../test_log.txt 2>&1
+
+  if [ $? != 0 ]; then RTN=1; fi
+
+  $JUDE2DIR/bin/filetool$POSTFIX \
+	verbose=1 \
+	params=params_ang_cross \
+	ang_data_save_fp=$ANGDATACROSS \
+	"out_"$CODE"_data/"$SRCFILE
+
+# >> ../test_log.txt 2>&1
+
+  cp $ANGDATAFWD temp/temp_file
+  $JUDE2DIR/bin/calctool$POSTFIX verbose=0 output_prec=6 script_fp=ct_script_check_zeros
+
+  local MAXV=`cat temp/temp_col_max`
+
+  if [ "$MAXV" == "0.000000e+00" ]
+  then
+    sed -e 's|0.000000e+00|1e-100|g' $ANGDATAFWD > temp/temp_file
+    mv temp/temp_file $ANGDATAFWD
+  fi 
+
+  cp $ANGDATACROSS temp/temp_file
+  $JUDE2DIR/bin/calctool$POSTFIX verbose=0 output_prec=6 script_fp=ct_script_check_zeros
+
+  local MAXV=`cat temp/temp_col_max`
+
+  if [ "$MAXV" == "0.000000e+00" ]
+  then
+    sed -e 's|0.000000e+00|1e-100|g' $ANGDATACROSS > temp/temp_file
+    mv temp/temp_file $ANGDATACROSS
+  fi
+
+  if [ $? != 0 ]; then RTN=1; fi
+}
+
+
+
+function get_hl_data {
+
+  local DFILE=$1
+  local DIFFUSE_LINE_START=$2
+  local DIRECT_LINE_START=$3
+  local NAME=$4
+
+  # the end of the blocks
+  let DIFFUSE_LINE_END=DIFFUSE_LINE_START+23
+  let DIRECT_LINE_END=DIRECT_LINE_START+23
+
+  # extract a single set of lines for the diffuse component and convert double space gaps to commas
+  sed "$DIFFUSE_LINE_START,$DIFFUSE_LINE_END!d" hl_original_data/Drun/$DFILE | sed -e "s|^  ||g;s|  |, |g" > temp/temp_diffuse
+
+  if [ "$DIRECT_LINE_START" == "na" ]
+  then
+
+    mv temp/temp_diffuse temp/temp_total
+
+  else 
+
+    # extract a single set of lines for the direct component and convert double space gaps to commas
+    sed "$DIRECT_LINE_START,$DIRECT_LINE_END!d" hl_original_data/Drun/$DFILE | sed -e "s|^  ||g;s|  |, |g" > temp/temp_direct
+
+    # add diffuse and total
+    $JUDE2DIR/bin/calctool$POSTFIX \
+	  verbose=0 \
+          output_separator="\", "\" \
+  	  script_fp=ct_script_make_total
+  fi
+
+  mkdir -p out_hl_data
+
+  # build data file
+  $JUDE2DIR/bin/filetool$POSTFIX \
+	verbose=1 \
+	partition=sphere \
+	vn=18 \
+	hn=24 \
+	theta_points=0,5,15,25,35,45,55,65,75,85,90,95,105,115,125,135,145,155,165,175,180 \
+	rd_save_fp=out_hl_data/$NAME \
+	hl_table_data_fp=temp/temp_total
+
+  # now can extract angular data
+  make_angular_data hl $NAME
+}
+
+
+
+function make_plot {
+
+  local CODE=$1
+  local TYPE=$2
+  local SRCNAME=$3
+  local SRCBAND=$4
+  local HLNAME=$5
+  local TITLE=$6
+  local MINY=$7
+  local MAXY=$8
+
+  local PS_TEMPLATE=ps_template
+
+  if [ $CODE == "jowa" ]
+  then
+    local WINDSPEED=0
+    local PS_TEMPLATE=ps_template_wind
+  fi
+
+  if [ $CODE == "jowb" ]
+  then
+    local WINDSPEED=0.5
+    local PS_TEMPLATE=ps_template_wind
+  fi
+
+  if [ $CODE == "jowc" ]
+  then
+    local WINDSPEED=1
+    local PS_TEMPLATE=ps_template_wind
+  fi
+
+  if [ $CODE == "jowd" ]
+  then
+    local WINDSPEED=3
+    local PS_TEMPLATE=ps_template_wind
+  fi
+
+  if [ $CODE == "jowe" ]
+  then
+    local WINDSPEED=10
+    local PS_TEMPLATE=ps_template_wind
+  fi
+
+  local AVAL="0."$SRCBAND
+
+  if [ "$SRCBAND" == "10" ]
+  then 
+    AVAL="1.0"
+  fi
+
+  if [ $TYPE == "fwd" ]
+  then
+    local SRCDATA="ang_"$CODE"_data/"$SRCNAME"_fwd"
+    local HLDATA="ang_hl_data/"$HLNAME"_fwd"
+    local DEG=0
+  else 
+    local SRCDATA="ang_"$CODE"_data/"$SRCNAME"_cross"
+    local HLDATA="ang_hl_data/"$HLNAME"_cross"
+    local DEG=90
+  fi
+
+  let SRCCOL=$SRCBAND+3
+
+  mkdir -p eps
+
+  local EPSFILE="eps/"$HLNAME"_"$TYPE".eps"
+
+  sed -e "s|<SRCDATA>|$SRCDATA|g;s|<SRCCOL>|$SRCCOL|g;s|<HLDATA>|$HLDATA|g;s|<EPSFILE>|$EPSFILE|g;s|<TITLE>|$TITLE|g" $PS_TEMPLATE > temp/ps_temp1
+  sed -e "s|<MINY>|$MINY|g;s|<MAXY>|$MAXY|g;s|<DEG>|$DEG|g;s|<AVAL>|$AVAL|g;s|<WINDSPEED>|$WINDSPEED|g" temp/ps_temp1 > temp/ps
+
+  gnuplot temp/ps
+}
+
+
+
+function process_one {
+
+  # jod joe etc
+  local CODE=$1
+
+  # 0 to 10
+  local ABS=$2
+
+  # make joe00 etc
+  if [ $ABS -lt 10 ]; 
+  then
+    local HLCODE=$CODE"0"$ABS
+  else
+    local HLCODE=$CODE""$ABS
+  fi
+
+  # L_w or L_sample_0.0m etc
+  local NAME=$3
+
+  # the lines in the Drun file to extract
+  local DIFFUSE_LINE_START=$4
+  local DIRECT_LINE_START=$5
+
+  # y-axis limits
+  local MINY=$6
+  local MAXY=$7
+
+  # build angular data from HL
+  get_hl_data "D"$HLCODE".txt" $DIFFUSE_LINE_START $DIRECT_LINE_START $HLCODE"_"$NAME
+
+  # build angular data from PlanarRad
+  make_angular_data $CODE $NAME
+
+  # remove underscores from name
+  local NAME2="`echo -n $NAME | sed 's|_|-|g'`"
+
+  make_plot $CODE fwd $NAME $ABS $HLCODE"_"$NAME $HLCODE" "$NAME2 $MINY $MAXY
+  make_plot $CODE cross $NAME $ABS $HLCODE"_"$NAME $HLCODE" "$NAME2 $MINY $MAXY
+}
+
+
+
+function process_set_1m {
+
+   # jod joe etc
+  local CODE=$1
+
+  # 0 to 10
+  local ABS=$2
+
+  # y-axis limits
+  local MINY=$3
+  local MAXY=$4
+
+  LU_WL=102
+  LU_WR=1210
+  LD_A=1235
+
+  LUW_SAMP0=127
+  LUW_SAMP1=223
+  LUW_SAMP2=319
+  LUW_SAMP3=415
+  LUW_SAMP4=511
+  LUW_SAMP5=631
+ 
+  LDW_DIFF0=681
+  LDW_DIFF1=777
+  LDW_DIFF2=873
+  LDW_DIFF3=969
+  LDW_DIFF4=1065
+  LDW_DIFF5=1185
+ 
+  LDW_DIREC0=1260
+  LDW_DIREC1=1356
+  LDW_DIREC2=1452
+  LDW_DIREC3=1548
+  LDW_DIREC4=1644
+  LDW_DIREC5=1764
+
+  process_one $CODE $ABS Ld_w $LDW_DIFF0 $LDW_DIREC0 $MINY $MAXY
+  process_one $CODE $ABS Ld_b $LDW_DIFF5 $LDW_DIREC5 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_w $LUW_SAMP0 na $MINY $MAXY
+  process_one $CODE $ABS Lu_b $LUW_SAMP5 na $MINY $MAXY
+
+  process_one $CODE $ABS Ld_w 681 1260 $MINY $MAXY
+  process_one $CODE $ABS Lu_w 127 na $MINY $MAXY
+
+  process_one $CODE $ABS Lu_wl 102 na $MINY $MAXY
+  process_one $CODE $ABS Lu_wr 1210 na $MINY $MAXY
+  process_one $CODE $ABS Lu_a 102 1210 $MINY $MAXY
+
+  process_one $CODE $ABS Ld_b 1185 1764 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_b 631 na $MINY $MAXY
+
+ 
+  process_one $CODE $ABS Ld_a 1235 na $MINY $MAXY
+
+  process_one $CODE $ABS Ld_sample_0.00m 681 1260 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_0.20m 777 1356 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_0.40m 873 1452 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_0.60m 969 1548 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_0.80m 1065 1644 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_1.00m 1185 1764 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_sample_0.00m 127 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_0.20m 223 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_0.40m 319 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_0.60m 415 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_0.80m 511 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_1.00m 631 na $MINY $MAXY
+
+  #process_one $CODE $ABS Ld_sample_0.10m 729 1308 $MINY $MAXY
+  #process_one $CODE $ABS Ld_sample_0.30m 825 1404 $MINY $MAXY 
+  #process_one $CODE $ABS Ld_sample_0.50m 921 1500 $MINY $MAXY
+  #process_one $CODE $ABS Ld_sample_0.70m 1017 1596 $MINY $MAXY
+  #process_one $CODE $ABS Ld_sample_0.90m 1113 1692 $MINY $MAXY
+
+  #process_one $CODE $ABS Lu_sample_0.10m 175 na $MINY $MAXY
+  #process_one $CODE $ABS Lu_sample_0.30m 271 na $MINY $MAXY 
+  #process_one $CODE $ABS Lu_sample_0.50m 367 na $MINY $MAXY
+  #process_one $CODE $ABS Lu_sample_0.70m 463 na $MINY $MAXY
+  #process_one $CODE $ABS Lu_sample_0.90m 559 na $MINY $MAXY
+}
+
+
+
+# jod jow
+
+function process_set_1 {
+
+   # joe etc
+  local CODE=$1
+
+  # 0 to 10
+  local ABS=$2
+
+  # y-axis limits
+  local MINY=$3
+  local MAXY=$4
+
+  LU_IT=102
+  LU_IR=1210
+  LD_A=1235
+
+  LUW_SAMP0=127
+  LUW_SAMP1=223
+  LUW_SAMP2=319
+  LUW_SAMP3=415
+  LUW_SAMP4=511
+  LUW_SAMP5=631
+
+  LDW_DIFF0=681
+  LDW_DIFF1=777
+  LDW_DIFF2=873
+  LDW_DIFF3=969
+  LDW_DIFF4=1065
+  LDW_DIFF5=1185
+ 
+  LDW_DIREC0=1260
+  LDW_DIREC1=1356
+  LDW_DIREC2=1452
+  LDW_DIREC3=1548
+  LDW_DIREC4=1644
+  LDW_DIREC5=1764
+ 
+  process_one $CODE $ABS Ld_w $LDW_DIFF0 $LDW_DIREC0 $MINY $MAXY
+  process_one $CODE $ABS Ld_b $LDW_DIFF5 $LDW_DIREC5 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_w $LUW_SAMP0 na $MINY $MAXY
+  process_one $CODE $ABS Lu_b $LUW_SAMP5 na $MINY $MAXY
+
+  process_one $CODE $ABS Lu_it $LU_IT na $MINY $MAXY
+  process_one $CODE $ABS Lu_ir $LU_IR na $MINY $MAXY
+  process_one $CODE $ABS Lu_a $LU_IT $LU_IR $MINY $MAXY
+
+  process_one $CODE $ABS Ld_a $LD_A na $MINY $MAXY
+
+  # ?
+  process_one $CODE $ABS Ld_it $LDW_DIREC0 na $MINY $MAXY
+  process_one $CODE $ABS Ld_ir $LDW_DIFF0 na $MINY $MAXY
+
+  process_one $CODE $ABS Ld_sample_0.00m $LDW_DIFF0 $LDW_DIREC0 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_0.20m $LDW_DIFF1 $LDW_DIREC1 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_0.40m $LDW_DIFF2 $LDW_DIREC2 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_0.60m $LDW_DIFF3 $LDW_DIREC3 $MINY $MAXY 
+  process_one $CODE $ABS Ld_sample_0.80m $LDW_DIFF4 $LDW_DIREC4 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_1.00m $LDW_DIFF5 $LDW_DIREC5 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_sample_0.00m $LUW_SAMP0 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_0.20m $LUW_SAMP1 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_0.40m $LUW_SAMP2 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_0.60m $LUW_SAMP3 na $MINY $MAXY 
+  process_one $CODE $ABS Lu_sample_0.80m $LUW_SAMP4 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_1.00m $LUW_SAMP5 na $MINY $MAXY
+}
+
+
+
+# joe
+
+function process_set_2 {
+
+   # joe etc
+  local CODE=$1
+
+  # 0 to 10
+  local ABS=$2
+
+  # y-axis limits
+  local MINY=$3
+  local MAXY=$4
+
+  LDW_DIFF0=423
+ 
+  LDW_DIREC0=762
+
+  process_one $CODE $ABS Ld_w 423 762 $MINY $MAXYxx
+  process_one $CODE $ABS Ld_b 687 1026 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_w 109 na $MINY $MAXY
+  process_one $CODE $ABS Lu_b 373 na $MINY $MAXY
+
+  process_one $CODE $ABS Lu_a 84 712 $MINY $MAXY
+  process_one $CODE $ABS Lu_it 84 na $MINY $MAXY
+  process_one $CODE $ABS Lu_ir 712 na $MINY $MAXY
+
+  process_one $CODE $ABS Ld_a 737 na $MINY $MAXY
+
+  # ?
+  process_one $CODE $ABS Ld_it $LDW_DIREC0 na $MINY $MAXY
+  process_one $CODE $ABS Ld_ir $LDW_DIFF0 na $MINY $MAXY
+
+  process_one $CODE $ABS Ld_sample_0.00m 423 762 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_1.00m 471 810 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_2.00m 519 858 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_3.00m 567 906 $MINY $MAXY 
+  process_one $CODE $ABS Ld_sample_4.00m 615 954 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_5.00m 687 1026 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_sample_0.00m 109 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_1.00m 157 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_2.00m 205 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_3.00m 253 na $MINY $MAXY 
+  process_one $CODE $ABS Lu_sample_4.00m 301 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_5.00m 373 na $MINY $MAXY
+}
+
+
+
+# jol
+
+function process_set_3 {
+
+   # joe etc
+  local CODE=$1
+
+  # 0 to 10
+  local ABS=$2
+
+  # y-axis limits
+  local MINY=$3
+  local MAXY=$4
+
+  LU_IT=102
+  LU_IR=1210
+  LD_A=1235
+
+  LUW_SAMP0=127
+  LUW_SAMP1=223
+  LUW_SAMP2=319
+  LUW_SAMP3=415
+  LUW_SAMP4=511
+  LUW_SAMP5=631
+
+  LDW_DIFF0=681
+  LDW_DIFF1=777
+  LDW_DIFF2=873
+  LDW_DIFF3=969
+  LDW_DIFF4=1065
+  LDW_DIFF5=1185
+ 
+  LDW_DIREC0=1260
+  LDW_DIREC1=1356
+  LDW_DIREC2=1452
+  LDW_DIREC3=1548
+  LDW_DIREC4=1644
+  LDW_DIREC5=1764
+ 
+  process_one $CODE $ABS Ld_w $LDW_DIFF0 $LDW_DIREC0 $MINY $MAXY
+  process_one $CODE $ABS Ld_b $LDW_DIFF5 $LDW_DIREC5 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_w $LUW_SAMP0 na $MINY $MAXY
+  process_one $CODE $ABS Lu_b $LUW_SAMP5 na $MINY $MAXY
+
+  process_one $CODE $ABS Lu_it $LU_IT na $MINY $MAXY
+  process_one $CODE $ABS Lu_ir $LU_IR na $MINY $MAXY
+  process_one $CODE $ABS Lu_a $LU_IT $LU_IR $MINY $MAXY
+
+  process_one $CODE $ABS Ld_a $LD_A na $MINY $MAXY
+
+  # ?
+  process_one $CODE $ABS Ld_it $LDW_DIREC0 na $MINY $MAXY
+  process_one $CODE $ABS Ld_ir $LDW_DIFF0 na $MINY $MAXY
+
+  process_one $CODE $ABS Ld_sample_0.00m $LDW_DIFF0 $LDW_DIREC0 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_1.00m $LDW_DIFF1 $LDW_DIREC1 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_2.00m $LDW_DIFF2 $LDW_DIREC2 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_3.00m $LDW_DIFF3 $LDW_DIREC3 $MINY $MAXY 
+  process_one $CODE $ABS Ld_sample_4.00m $LDW_DIFF4 $LDW_DIREC4 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_5.00m $LDW_DIFF5 $LDW_DIREC5 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_sample_0.00m $LUW_SAMP0 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_1.00m $LUW_SAMP1 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_2.00m $LUW_SAMP2 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_3.00m $LUW_SAMP3 na $MINY $MAXY 
+  process_one $CODE $ABS Lu_sample_4.00m $LUW_SAMP4 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_5.00m $LUW_SAMP5 na $MINY $MAXY
+}
+
+
+
+# jof
+
+function process_set_4 {
+
+   # joe etc
+  local CODE=$1
+
+  # 0 to 10
+  local ABS=$2
+
+  # y-axis limits
+  local MINY=$3
+  local MAXY=$4
+
+  LU_IT=156
+  LU_IR=2704
+  LD_A=2729
+
+  LUW_SAMP0=181
+  LUW_SAMP1=421
+  LUW_SAMP2=661
+  LUW_SAMP3=901
+  LUW_SAMP4=1141
+  LUW_SAMP5=1405
+
+  LDW_DIFF0=1455
+  LDW_DIFF1=1695
+  LDW_DIFF2=1935
+  LDW_DIFF3=2175
+  LDW_DIFF4=2415
+  LDW_DIFF5=2679
+ 
+  LDW_DIREC0=2754
+  LDW_DIREC1=2994
+  LDW_DIREC2=3234
+  LDW_DIREC3=3474
+  LDW_DIREC4=3714
+  LDW_DIREC5=3978
+ 
+  process_one $CODE $ABS Ld_w $LDW_DIFF0 $LDW_DIREC0 $MINY $MAXY
+  process_one $CODE $ABS Ld_b $LDW_DIFF5 $LDW_DIREC5 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_w $LUW_SAMP0 na $MINY $MAXY
+  process_one $CODE $ABS Lu_b $LUW_SAMP5 na $MINY $MAXY
+
+  process_one $CODE $ABS Lu_it $LU_IT na $MINY $MAXY
+  process_one $CODE $ABS Lu_ir $LU_IR na $MINY $MAXY
+  process_one $CODE $ABS Lu_a $LU_IT $LU_IR $MINY $MAXY
+
+  process_one $CODE $ABS Ld_a $LD_A na $MINY $MAXY
+
+  # ?
+  process_one $CODE $ABS Ld_it $LDW_DIREC0 na $MINY $MAXY
+  process_one $CODE $ABS Ld_ir $LDW_DIFF0 na $MINY $MAXY
+
+  process_one $CODE $ABS Ld_sample_0.00m $LDW_DIFF0 $LDW_DIREC0 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_5.00m $LDW_DIFF1 $LDW_DIREC1 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_10.00m $LDW_DIFF2 $LDW_DIREC2 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_15.00m $LDW_DIFF3 $LDW_DIREC3 $MINY $MAXY 
+  process_one $CODE $ABS Ld_sample_20.00m $LDW_DIFF4 $LDW_DIREC4 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_25.00m $LDW_DIFF5 $LDW_DIREC5 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_sample_0.00m $LUW_SAMP0 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_5.00m $LUW_SAMP1 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_10.00m $LUW_SAMP2 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_15.00m $LUW_SAMP3 na $MINY $MAXY 
+  process_one $CODE $ABS Lu_sample_20.00m $LUW_SAMP4 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_25.00m $LUW_SAMP5 na $MINY $MAXY
+}
+
+
+
+# jod
+
+function process_set_5 {
+
+   # joe etc
+  local CODE=$1
+
+  # 0 to 10
+  local ABS=$2
+
+  # y-axis limits
+  local MINY=$3
+  local MAXY=$4
+
+  LU_IT=102
+  LU_IR=1210
+  LD_A=1235
+
+  LUW_SAMP0=127
+  LUW_SAMP1=223
+  LUW_SAMP2=319
+  LUW_SAMP3=415
+  LUW_SAMP4=511
+  LUW_SAMP5=631
+
+  LDW_DIFF0=681
+  LDW_DIFF1=777
+  LDW_DIFF2=873
+  LDW_DIFF3=969
+  LDW_DIFF4=1065
+  LDW_DIFF5=1185
+ 
+  LDW_DIREC0=1260
+  LDW_DIREC1=1356
+  LDW_DIREC2=1452
+  LDW_DIREC3=1548
+  LDW_DIREC4=1644
+  LDW_DIREC5=1764
+ 
+  process_one $CODE $ABS Ld_w $LDW_DIFF0 $LDW_DIREC0 $MINY $MAXY
+  process_one $CODE $ABS Ld_b $LDW_DIFF5 $LDW_DIREC5 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_w $LUW_SAMP0 na $MINY $MAXY
+  process_one $CODE $ABS Lu_b $LUW_SAMP5 na $MINY $MAXY
+
+  process_one $CODE $ABS Lu_it $LU_IT na $MINY $MAXY
+  process_one $CODE $ABS Lu_ir $LU_IR na $MINY $MAXY
+  process_one $CODE $ABS Lu_a $LU_IT $LU_IR $MINY $MAXY
+
+  # ?
+  process_one $CODE $ABS Ld_it $LDW_DIREC0 na $MINY $MAXY
+  process_one $CODE $ABS Ld_ir $LDW_DIFF0 na $MINY $MAXY
+
+  process_one $CODE $ABS Ld_a $LD_A na $MINY $MAXY
+
+  process_one $CODE $ABS Ld_sample_0.00m $LDW_DIFF0 $LDW_DIREC0 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_2.00m $LDW_DIFF1 $LDW_DIREC1 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_4.00m $LDW_DIFF2 $LDW_DIREC2 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_6.00m $LDW_DIFF3 $LDW_DIREC3 $MINY $MAXY 
+  process_one $CODE $ABS Ld_sample_8.00m $LDW_DIFF4 $LDW_DIREC4 $MINY $MAXY
+  process_one $CODE $ABS Ld_sample_10.00m $LDW_DIFF5 $LDW_DIREC5 $MINY $MAXY
+
+  process_one $CODE $ABS Lu_sample_0.00m $LUW_SAMP0 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_2.00m $LUW_SAMP1 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_4.00m $LUW_SAMP2 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_6.00m $LUW_SAMP3 na $MINY $MAXY 
+  process_one $CODE $ABS Lu_sample_8.00m $LUW_SAMP4 na $MINY $MAXY
+  process_one $CODE $ABS Lu_sample_10.00m $LUW_SAMP5 na $MINY $MAXY
+}
+
+
+
+function do_jod {
+
+  calc_slab jod
+  process_set_1 jod 0 1E-1 1E2
+  process_set_1 jod 2 1E-2 1E2
+  process_set_1 jod 4 1E-2 1E2
+  process_set_1 jod 6 1E-3 1E2
+  process_set_1 jod 8 1E-4 1E2
+  process_set_1 jod 10 1E-5 1E2
+
+  sed -e "s|<CODE>|jod00|g;s|<D1>|0.20|g;s|<D2>|0.40|g;s|<D3>|0.60|g;s|<D4>|0.80|g" tex_src/summary_block_template.tex > tex/jod_part.tex
+  sed -e "s|<CODE>|jod02|g;s|<D1>|0.20|g;s|<D2>|0.40|g;s|<D3>|0.60|g;s|<D4>|0.80|g" tex_src/summary_block_template.tex >> tex/jod_part.tex
+  sed -e "s|<CODE>|jod04|g;s|<D1>|0.20|g;s|<D2>|0.40|g;s|<D3>|0.60|g;s|<D4>|0.80|g" tex_src/summary_block_template.tex >> tex/jod_part.tex
+  sed -e "s|<CODE>|jod06|g;s|<D1>|0.20|g;s|<D2>|0.40|g;s|<D3>|0.60|g;s|<D4>|0.80|g" tex_src/summary_block_template.tex >> tex/jod_part.tex
+  sed -e "s|<CODE>|jod08|g;s|<D1>|0.20|g;s|<D2>|0.40|g;s|<D3>|0.60|g;s|<D4>|0.80|g" tex_src/summary_block_template.tex >> tex/jod_part.tex
+  sed -e "s|<CODE>|jod10|g;s|<D1>|0.20|g;s|<D2>|0.40|g;s|<D3>|0.60|g;s|<D4>|0.80|g" tex_src/summary_block_template.tex >> tex/jod_part.tex
+}
+
+
+
+function do_joe {
+
+  calc_slab joe
+  process_set_2 joe 0 1E-3 1E2
+  process_set_2 joe 2 1E-3 1E2
+  process_set_2 joe 4 1E-3 1E2
+  process_set_2 joe 6 1E-3 1E2
+  process_set_2 joe 8 1E-3 1E2
+  process_set_2 joe 10 1E-3 1E2
+
+  sed -e "s|<CODE>|joe00|g;s|<D1>|1.00|g;s|<D2>|2.00|g;s|<D3>|3.00|g;s|<D4>|4.00|g" tex_src/summary_block_template.tex > tex/joe_part.tex
+  sed -e "s|<CODE>|joe02|g;s|<D1>|1.00|g;s|<D2>|2.00|g;s|<D3>|3.00|g;s|<D4>|4.00|g" tex_src/summary_block_template.tex >> tex/joe_part.tex
+  sed -e "s|<CODE>|joe04|g;s|<D1>|1.00|g;s|<D2>|2.00|g;s|<D3>|3.00|g;s|<D4>|4.00|g" tex_src/summary_block_template.tex >> tex/joe_part.tex
+  sed -e "s|<CODE>|joe06|g;s|<D1>|1.00|g;s|<D2>|2.00|g;s|<D3>|3.00|g;s|<D4>|4.00|g" tex_src/summary_block_template.tex >> tex/joe_part.tex
+  sed -e "s|<CODE>|joe08|g;s|<D1>|1.00|g;s|<D2>|2.00|g;s|<D3>|3.00|g;s|<D4>|4.00|g" tex_src/summary_block_template.tex >> tex/joe_part.tex
+  sed -e "s|<CODE>|joe10|g;s|<D1>|1.00|g;s|<D2>|2.00|g;s|<D3>|3.00|g;s|<D4>|4.00|g" tex_src/summary_block_template.tex >> tex/joe_part.tex
+}
+
+
+
+function do_jof {
+
+  # - jof08 has an error
+  calc_slab jof 
+  process_set_4 jof 0 1E-3 1E2
+  process_set_4 jof 2 1E-3 1E2
+  process_set_4 jof 4 1E-3 1E2
+  process_set_4 jof 6 1E-3 1E2
+  process_set_4 jof 10 1E-3 1E2
+
+  sed -e "s|<CODE>|jof00|g;s|<D1>|5.00|g;s|<D2>|10.00|g;s|<D3>|15.00|g;s|<D4>|20.00|g" tex_src/summary_block_template.tex > tex/jof_part.tex
+  sed -e "s|<CODE>|jof02|g;s|<D1>|5.00|g;s|<D2>|10.00|g;s|<D3>|15.00|g;s|<D4>|20.00|g" tex_src/summary_block_template.tex >> tex/jof_part.tex
+  sed -e "s|<CODE>|jof04|g;s|<D1>|5.00|g;s|<D2>|10.00|g;s|<D3>|15.00|g;s|<D4>|20.00|g" tex_src/summary_block_template.tex >> tex/jof_part.tex
+  sed -e "s|<CODE>|jof06|g;s|<D1>|5.00|g;s|<D2>|10.00|g;s|<D3>|15.00|g;s|<D4>|20.00|g" tex_src/summary_block_template.tex >> tex/jof_part.tex
+  sed -e "s|<CODE>|jof10|g;s|<D1>|5.00|g;s|<D2>|10.00|g;s|<D3>|15.00|g;s|<D4>|20.00|g" tex_src/summary_block_template.tex >> tex/jof_part.tex
+}
+
+
+
+function do_jol {
+
+  calc_slab jol
+  process_set_3 jol 0 1E-3 1E2
+  process_set_3 jol 2 1E-3 1E2
+  process_set_3 jol 4 1E-3 1E2
+  process_set_3 jol 6 1E-3 1E2
+  process_set_3 jol 8 1E-3 1E2
+  process_set_3 jol 10 1E-3 1E2
+
+  sed -e "s|<CODE>|jol00|g;s|<D1>|1.00|g;s|<D2>|2.00|g;s|<D3>|3.00|g;s|<D4>|4.00|g" tex_src/summary_block_template.tex > tex/jol_part.tex
+  sed -e "s|<CODE>|jol02|g;s|<D1>|1.00|g;s|<D2>|2.00|g;s|<D3>|3.00|g;s|<D4>|4.00|g" tex_src/summary_block_template.tex >> tex/jol_part.tex
+  sed -e "s|<CODE>|jol04|g;s|<D1>|1.00|g;s|<D2>|2.00|g;s|<D3>|3.00|g;s|<D4>|4.00|g" tex_src/summary_block_template.tex >> tex/jol_part.tex
+  sed -e "s|<CODE>|jol06|g;s|<D1>|1.00|g;s|<D2>|2.00|g;s|<D3>|3.00|g;s|<D4>|4.00|g" tex_src/summary_block_template.tex >> tex/jol_part.tex
+  sed -e "s|<CODE>|jol08|g;s|<D1>|1.00|g;s|<D2>|2.00|g;s|<D3>|3.00|g;s|<D4>|4.00|g" tex_src/summary_block_template.tex >> tex/jol_part.tex
+  sed -e "s|<CODE>|jol10|g;s|<D1>|1.00|g;s|<D2>|2.00|g;s|<D3>|3.00|g;s|<D4>|4.00|g" tex_src/summary_block_template.tex >> tex/jol_part.tex
+}
+
+
+
+function do_jow {
+
+  calc_slab jowa
+  calc_slab jowb
+  calc_slab jowc
+  calc_slab jowd
+  calc_slab jowe
+
+  process_set_5 jowa 0 1E-3 1E2
+  process_set_5 jowb 05 1E-3 1E2
+  process_set_5 jowc 1 1E-3 1E2
+  process_set_5 jowd 3 1E-3 1E2
+  process_set_5 jowe 10 1E-3 1E2
+
+  rm tex/jow_part.tex
+
+  sed -e "s|<CODE>|jowa00|g;s|<D1>|2.00|g;s|<D2>|4.00|g;s|<D3>|6.00|g;s|<D4>|8.00|g" tex_src/summary_wind_template.tex >> tex/jow_part.tex
+  sed -e "s|<CODE>|jowb005|g;s|<D1>|2.00|g;s|<D2>|4.00|g;s|<D3>|6.00|g;s|<D4>|8.00|g" tex_src/summary_wind_template.tex >> tex/jow_part.tex
+  sed -e "s|<CODE>|jowc01|g;s|<D1>|2.00|g;s|<D2>|4.00|g;s|<D3>|6.00|g;s|<D4>|8.00|g" tex_src/summary_wind_template.tex >> tex/jow_part.tex
+  sed -e "s|<CODE>|jowd03|g;s|<D1>|2.00|g;s|<D2>|4.00|g;s|<D3>|6.00|g;s|<D4>|8.00|g" tex_src/summary_wind_template.tex >> tex/jow_part.tex
+  sed -e "s|<CODE>|jowe10|g;s|<D1>|2.00|g;s|<D2>|4.00|g;s|<D3>|6.00|g;s|<D4>|8.00|g" tex_src/summary_wind_template.tex >> tex/jow_part.tex
+}
+
+
+
+
+function make_doc {
+
+  local DATE=`date`
+  local HOST=`hostname`
+
+  sed -e "s|<DATE>|$DATE|g;s|<HOST>|$HOST|g" tex_src/summary_header_template.tex > tex/summary.tex
+
+  cat tex/jod_part.tex >> tex/summary.tex
+  cat tex/joe_part.tex >> tex/summary.tex
+  cat tex/jof_part.tex >> tex/summary.tex
+  cat tex/jol_part.tex >> tex/summary.tex
+  cat tex/jow_part.tex >> tex/summary.tex
+
+  cat tex_src/summary_footer.tex >> tex/summary.tex
+
+  cd tex
+  latex summary.tex
+  dvipdf summary.dvi
+  mv summary.pdf ../pr_hl_compare.pdf
+  cd ..
+}
+
+
+POSTFIX="_free"
+
+mkdir -p tex
+mkdir -p temp
+
+do_jod
+do_joe
+do_jof
+do_jol
+do_jow
+
+make_doc
+exit
+
+

@@ -1,0 +1,6 @@
+band_count = 1
+partition = sphere
+vn = 4
+hn = 8
+type = forward
+phase_func_save_fp = pf_forward_mono_4x8

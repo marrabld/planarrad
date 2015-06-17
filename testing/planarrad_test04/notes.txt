@@ -1,0 +1,5 @@
+clear sky with solar zenith angle 34 deg
+windspeed 3 ms-1 azimuthally averaged
+depth 25 m
+substrate reflectance flat 0.2
+

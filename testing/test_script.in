@@ -1,0 +1,68 @@
+#!/bin/bash
+
+function test_comp {
+
+  local NAME=$1
+  local PROG=$2
+
+  echo -n "Testing "$NAME"... "
+
+  #./base/testing/test_base_free >> test_log
+
+  ./$PROG >> test_log.txt
+
+  RTN=$?
+
+  if [ $RTN == 0 ]; then
+    echo "Pass."
+  else
+    echo "Fail."
+  fi
+
+  let FAIL_COUNT=$FAIL_COUNT+$RTN
+}
+
+
+
+function test_tool {
+
+  local SCRIPT=$1
+
+  ./$SCRIPT
+
+  RTN=$?
+
+  let FAIL_COUNT=$FAIL_COUNT+$RTN
+}
+
+
+
+FAIL_COUNT=0
+POSTFIX=""
+
+rm -rf test_log.txt
+
+echo "Testing components, please wait..."
+
+test_comp jude::base$POSTFIX ../base/testing/test_base$POSTFIX
+#test_comp jude::math$POSTFIX ../math/testing/test_math$POSTFIX
+test_comp jude::file$POSTFIX ../file/testing/test_file$POSTFIX
+test_comp jude::S3$POSTFIX ../S3/testing/test_S3$POSTFIX
+test_comp jude::drawS3$POSTFIX ../drawS3/testing/test_drawS3$POSTFIX
+test_comp jude::ds$POSTFIX ../ds/testing/test_ds$POSTFIX
+test_comp jude::table$POSTFIX ../table/testing/test_table$POSTFIX
+
+test_tool skytool_test_script
+
+test_tool slabtool_test_script
+
+echo "-----------------"
+
+if [ $FAIL_COUNT == 0 ]; then
+  echo "All tests passed ok."
+else
+  echo "Some tests failed, but this may not be a problem."
+  echo "Examine the contents of the file test_log.txt to determine which tests failed and why."
+  echo "Consult http://www.planarrad.com/support to see if this a known or serious issue"
+  echo "and for instructions of what to do if you cannot resolve the problem."
+fi

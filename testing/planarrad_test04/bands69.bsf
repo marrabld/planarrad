@@ -1,0 +1,5 @@
+bs_name = 69 Bands (400-740 nm)
+bs_code = 69
+band_count = 69
+band_centres_fp = bands69_cen.txt
+preferred_default = no

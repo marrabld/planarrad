@@ -1,0 +1,2 @@
+#!/bin/sh
+/usr/local/qt4/bin/rcc -o res.cc res.qrc 

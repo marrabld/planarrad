@@ -1,0 +1,9 @@
+band_count=1
+partition=sphere
+vn=4
+hn=8
+type=specular
+azimuth=45
+zenith=50
+sky_save_fp=sky_out
+sky_image_save_fp=image_out.ppm
