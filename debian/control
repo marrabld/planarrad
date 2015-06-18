@@ -1,0 +1,13 @@
+Source: planarrad
+Section: devel
+Priority: extra
+Maintainer: Daniel Marrable <marrabld@gmail.com>
+Build-Depends: debhelper (>= 7.0.50~), autoconf, autotools-dev, automake, libqt4-dev, libboost-dev, libxext-dev, libjpeg-dev, xorg-dev
+Standards-Version: 3.8.4
+Homepage: http://fsf.nerc.ac.uk/resources/software/planarrad/planarrad.shtml
+
+Package: planarrad
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, autoconf, autotools-dev, automake, autogen, libqt4-dev, libtool, libboost-dev, libqtcore4, libqtgui4, libqt4-qt3support, xorg-dev
+Description: Radiative transfer numerical model
+ PlanarRad is a freely available open-source C++ implementation of the invariant imbedded numerical integration technique for calculating radiative transfer in plane-parallel shallow-water environments, i.e. where the substrate reflectance and water column optical properties can be assumed horizontally homogenous. The solution algorithm follows almost exactly the formulation described in the book Light and Water by Curt Mobley, and is therefore capable of calculating angular radiance through the water column, and above-water reflectances, based on the Inherent Optical Properties (IOPs) of the water. PlanarRad is intended primarily as an instructive teaching aid for hydrological optics, and as such comes with a variety of visualisation outputs built-in. Multiple model runs and actual data from underwater profiling spectroradiometers can be directly compared in the visualisation tools provided, to examine model sensitivity to input parameters or for model closure experiments.
